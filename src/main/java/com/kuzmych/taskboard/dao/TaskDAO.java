@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.kuzmych.taskboard.entity.Task;
 
-public class TaskDAO implements IEntityDAO<Task> {
+public class TaskDAO implements ITaskDAO {
 
 	@Override
 	public Task findById(Long id) {

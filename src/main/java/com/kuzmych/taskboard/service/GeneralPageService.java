@@ -1,10 +1,10 @@
-package com.kuzmych.taskboard.dao;
+package com.kuzmych.taskboard.service;
 
 import java.util.List;
 
 import com.kuzmych.taskboard.entity.GeneralPage;
 
-public class GeneralPageDAO implements IGeneralPageDAO{
+public class GeneralPageService implements IGeneralPageService{
 
 	@Override
 	public GeneralPage findById(Long id) {
@@ -25,7 +25,7 @@ public class GeneralPageDAO implements IGeneralPageDAO{
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public void delete(Long id) {
 		// TODO Auto-generated method stub
 		
 	}

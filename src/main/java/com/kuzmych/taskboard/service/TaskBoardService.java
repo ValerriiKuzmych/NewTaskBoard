@@ -1,10 +1,10 @@
-package com.kuzmych.taskboard.dao;
+package com.kuzmych.taskboard.service;
 
 import java.util.List;
 
 import com.kuzmych.taskboard.entity.TaskBoard;
 
-public class TaskBoardDAO implements ITaskBoardDAO{
+public class TaskBoardService implements ITaskBoardService{
 
 	@Override
 	public TaskBoard findById(Long id) {
@@ -25,7 +25,7 @@ public class TaskBoardDAO implements ITaskBoardDAO{
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public void delete(Long id) {
 		// TODO Auto-generated method stub
 		
 	}

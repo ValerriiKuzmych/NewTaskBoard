@@ -1,31 +1,31 @@
-package com.kuzmych.taskboard.dao;
+package com.kuzmych.taskboard.service;
 
 import java.util.List;
 
-import com.kuzmych.taskboard.entity.User;
+import com.kuzmych.taskboard.entity.Task;
 
-public class UserDAO implements IUserDAO {
+public class TaskService implements ITaskService{
 
 	@Override
-	public User findById(Long id) {
+	public Task findById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<User> findAll() {
+	public List<Task> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void save(User user) {
+	public void save(Task user) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public void delete(Long id) {
 		// TODO Auto-generated method stub
 		
 	}
