@@ -2,32 +2,91 @@ package com.kuzmych.taskboard.dao;
 
 import java.util.List;
 
-import com.kuzmych.taskboard.entity.TaskBoard;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
-public class TaskBoardDAO implements ITaskBoardDAO{
+import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.util.HibernateUtil;
+
+
+@Repository
+public class TaskBoardDAO implements ITaskBoardDAO {
 
 	@Override
 	public TaskBoard findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		TaskBoard taskBoard = session.get(TaskBoard.class, id);
+
+		session.close();
+
+		return taskBoard;
 	}
 
 	@Override
 	public List<TaskBoard> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		List<TaskBoard> taskBoard = session.createQuery("from User", TaskBoard.class).list();
+
+		session.close();
+
+		return taskBoard;
 	}
 
 	@Override
-	public void save(TaskBoard user) {
-		// TODO Auto-generated method stub
-		
+	public void save(TaskBoard taskBoard) {
+
+		Transaction transaction = null;
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+			transaction = session.beginTransaction();
+
+			session.saveOrUpdate(taskBoard);
+
+			transaction.commit();
+
+		} catch (Exception e) {
+
+			if (transaction != null)
+
+				transaction.rollback();
+
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-		
+
+		Transaction transaction = null;
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			
+			transaction = session.beginTransaction();
+			
+			TaskBoard taskBoard = session.get(TaskBoard.class, id);
+			
+			if (taskBoard != null) {
+				
+				session.delete(taskBoard);
+			}
+			
+			transaction.commit();
+			
+		} catch (Exception e) {
+			
+			if (transaction != null)
+				
+				transaction.rollback();
+			
+			e.printStackTrace();
+		}
 	}
 
 }

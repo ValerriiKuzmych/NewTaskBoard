@@ -1,33 +1,76 @@
 package com.kuzmych.taskboard.dao;
 
-import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.kuzmych.taskboard.entity.GeneralPage;
+import com.kuzmych.taskboard.util.HibernateUtil;
 
-public class GeneralPageDAO implements IGeneralPageDAO{
+@Repository
+public class GeneralPageDAO implements IGeneralPageDAO {
 
 	@Override
 	public GeneralPage findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		GeneralPage generalPage = session.get(GeneralPage.class, id);
+
+		session.close();
+
+		return generalPage;
 	}
 
 	@Override
-	public List<GeneralPage> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void save(GeneralPage generalPage) {
 
-	@Override
-	public void save(GeneralPage user) {
-		// TODO Auto-generated method stub
-		
+		Transaction transaction = null;
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+			transaction = session.beginTransaction();
+
+			session.saveOrUpdate(generalPage);
+
+			transaction.commit();
+
+		} catch (Exception e) {
+
+			if (transaction != null)
+				
+				transaction.rollback();
+
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-		
+
+		Transaction transaction = null;
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+			transaction = session.beginTransaction();
+
+			GeneralPage generalPage = session.get(GeneralPage.class, id);
+
+			if (generalPage != null) {
+
+				session.delete(generalPage);
+			}
+			transaction.commit();
+
+		} catch (Exception e) {
+
+			if (transaction != null)
+
+				transaction.rollback();
+
+			e.printStackTrace();
+		}
+
 	}
 
 }
