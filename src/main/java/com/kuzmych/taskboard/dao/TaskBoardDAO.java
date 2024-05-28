@@ -30,7 +30,7 @@ public class TaskBoardDAO implements ITaskBoardDAO {
 
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
-		List<TaskBoard> taskBoard = session.createQuery("from User", TaskBoard.class).list();
+		List<TaskBoard> taskBoard = session.createQuery("from TaskBoard", TaskBoard.class).list();
 
 		session.close();
 

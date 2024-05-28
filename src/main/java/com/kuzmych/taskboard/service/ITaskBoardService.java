@@ -11,7 +11,7 @@ public interface ITaskBoardService {
 
 	List<TaskBoard> findAll();
 
-	void save(TaskBoard user);
+	void save(TaskBoard TaskBoard);
 
 	void delete(Long id);
 

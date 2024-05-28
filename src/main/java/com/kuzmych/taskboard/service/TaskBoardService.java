@@ -2,32 +2,36 @@ package com.kuzmych.taskboard.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kuzmych.taskboard.dao.TaskBoardDAO;
 import com.kuzmych.taskboard.entity.TaskBoard;
 
-public class TaskBoardService implements ITaskBoardService{
+@Service
+public class TaskBoardService implements ITaskBoardService {
+
+	@Autowired
+	private TaskBoardDAO taskBoardDAO;
 
 	@Override
 	public TaskBoard findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return taskBoardDAO.findById(id);
 	}
 
 	@Override
 	public List<TaskBoard> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return taskBoardDAO.findAll();
 	}
 
 	@Override
-	public void save(TaskBoard user) {
-		// TODO Auto-generated method stub
-		
+	public void save(TaskBoard taskBoard) {
+		taskBoardDAO.save(taskBoard);
 	}
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
+		taskBoardDAO.deleteById(id);
 	}
 
 }

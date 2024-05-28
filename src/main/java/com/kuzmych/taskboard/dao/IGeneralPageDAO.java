@@ -6,7 +6,7 @@ public interface IGeneralPageDAO {
 
 	GeneralPage findById(Long id);
 
-	void save(GeneralPage user);
+	void save(GeneralPage generalPage);
 
 	void deleteById(Long id);
 

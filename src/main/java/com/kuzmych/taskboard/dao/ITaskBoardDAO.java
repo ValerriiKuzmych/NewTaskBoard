@@ -10,7 +10,7 @@ public interface ITaskBoardDAO {
 
 	List<TaskBoard> findAll();
 
-	void save(TaskBoard user);
+	void save(TaskBoard taskBoard);
 
 	void deleteById(Long id);
 

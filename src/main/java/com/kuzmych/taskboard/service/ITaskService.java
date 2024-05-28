@@ -11,7 +11,7 @@ public interface ITaskService {
 
 	List<Task> findAll();
 
-	void save(Task user);
+	void save(Task task);
 
 	void delete(Long id);
 

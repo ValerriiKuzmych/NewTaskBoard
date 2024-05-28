@@ -1,33 +1,33 @@
 package com.kuzmych.taskboard.service;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import com.kuzmych.taskboard.dao.GeneralPageDAO;
 import com.kuzmych.taskboard.entity.GeneralPage;
 
-public class GeneralPageService implements IGeneralPageService{
+@Service
+public class GeneralPageService implements IGeneralPageService {
+
+	GeneralPageDAO generalPageDAO;
 
 	@Override
 	public GeneralPage findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return generalPageDAO.findById(id);
 	}
 
 	@Override
-	public List<GeneralPage> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void save(GeneralPage generalPage) {
 
-	@Override
-	public void save(GeneralPage user) {
-		// TODO Auto-generated method stub
-		
+		generalPageDAO.save(generalPage);
+
 	}
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
+
+		generalPageDAO.deleteById(id);
+
 	}
 
 }

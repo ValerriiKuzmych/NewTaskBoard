@@ -10,7 +10,7 @@ public interface ITaskDAO {
 
 	List<Task> findAll();
 
-	void save(Task user);
+	void save(Task task);
 
 	void deleteById(Long id);
 
