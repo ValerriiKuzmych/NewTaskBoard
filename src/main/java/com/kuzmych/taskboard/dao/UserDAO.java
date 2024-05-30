@@ -5,8 +5,8 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.kuzmych.taskboard.config.HibernateUtil;
 import com.kuzmych.taskboard.entity.User;
-import com.kuzmych.taskboard.util.HibernateUtil;
 
 public class UserDAO implements IUserDAO {
 

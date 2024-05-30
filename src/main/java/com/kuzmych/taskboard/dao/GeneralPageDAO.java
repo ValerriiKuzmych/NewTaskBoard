@@ -4,8 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
+import com.kuzmych.taskboard.config.HibernateUtil;
 import com.kuzmych.taskboard.entity.GeneralPage;
-import com.kuzmych.taskboard.util.HibernateUtil;
 
 @Repository
 public class GeneralPageDAO implements IGeneralPageDAO {

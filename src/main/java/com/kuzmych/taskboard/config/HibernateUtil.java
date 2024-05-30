@@ -1,4 +1,4 @@
-package com.kuzmych.taskboard.util;
+package com.kuzmych.taskboard.config;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
