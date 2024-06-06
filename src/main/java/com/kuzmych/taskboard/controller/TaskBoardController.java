@@ -15,14 +15,14 @@ import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.service.TaskBoardService;
 
 @RestController
-@RequestMapping("/taskBoards")
+@RequestMapping("/taskboard")
 public class TaskBoardController {
 
 	@Autowired
 	private TaskBoardService taskBoardService;
 
 	@GetMapping("/{id}")
-	public TaskBoard getUserById(@PathVariable Long id) {
+	public TaskBoard getById(@PathVariable Long id) {
 		return taskBoardService.findById(id);
 	}
 
@@ -31,13 +31,15 @@ public class TaskBoardController {
 		return taskBoardService.findAll();
 	}
 
-	@PostMapping
-	public void createUser(@RequestBody TaskBoard taskBoard) {
+	@PostMapping("/new")
+	public String create(@RequestBody TaskBoard taskBoard) {
 		taskBoardService.save(taskBoard);
+		
+		return "redirect:/taskboard";
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteUser(@PathVariable Long id) {
+	public void delete(@PathVariable Long id) {
 		taskBoardService.delete(id);
 	}
 

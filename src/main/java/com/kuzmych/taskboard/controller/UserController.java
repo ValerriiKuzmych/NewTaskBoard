@@ -22,7 +22,7 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/{id}")
-	public User getUserById(@PathVariable Long id) {
+	public User getById(@PathVariable Long id) {
 		return userService.findById(id);
 	}
 
@@ -32,12 +32,12 @@ public class UserController {
 	}
 
 	@PostMapping
-	public void createUser(@RequestBody User user) {
+	public void create(@RequestBody User user) {
 		userService.save(user);
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteUser(@PathVariable Long id) {
+	public void delete(@PathVariable Long id) {
 		userService.delete(id);
 	}
 }

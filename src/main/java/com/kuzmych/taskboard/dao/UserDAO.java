@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.kuzmych.taskboard.config.HibernateUtil;
 import com.kuzmych.taskboard.entity.User;
 
+
+@Repository
 public class UserDAO implements IUserDAO {
 
 	@Override

@@ -2,7 +2,6 @@ package com.kuzmych.taskboard.config;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,19 +16,18 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
-@ComponentScan("{com.kuzmych.taskboard.config, com.kuzmych.taskboard.controller, com.kuzmych.taskboard.dao, com.kuzmych.taskboard.model, com.kuzmych.taskboard.entity}")
+@ComponentScan(basePackages = "com.kuzmych.taskboard")
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
 	private final ApplicationContext applicationContext;
 
-	@Autowired
 	public SpringConfig(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
 	@Bean
-	public SpringResourceTemplateResolver templateResolver() {
+	SpringResourceTemplateResolver templateResolver() {
 		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
 		templateResolver.setApplicationContext(applicationContext);
 		templateResolver.setPrefix("/WEB-INF/views/");
@@ -38,7 +36,7 @@ public class SpringConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public SpringTemplateEngine templateEngine() {
+	SpringTemplateEngine templateEngine() {
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
 		templateEngine.setEnableSpringELCompiler(true);
@@ -53,7 +51,7 @@ public class SpringConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public DataSource dataSource() {
+	DataSource dataSource() {
 
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
@@ -67,7 +65,7 @@ public class SpringConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public JdbcTemplate jdbcTemplate() {
+	JdbcTemplate jdbcTemplate() {
 
 		return new JdbcTemplate(dataSource());
 

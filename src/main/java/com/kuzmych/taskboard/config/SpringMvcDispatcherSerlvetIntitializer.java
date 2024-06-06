@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 
 public class SpringMvcDispatcherSerlvetIntitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-    @Override
+	@Override
     protected Class<?>[] getRootConfigClasses() {
         return null;
     }
@@ -33,4 +33,5 @@ public class SpringMvcDispatcherSerlvetIntitializer extends AbstractAnnotationCo
         aContext.addFilter("hiddenHttpMethodFilter",
                 new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*");
     }
+    
 }
