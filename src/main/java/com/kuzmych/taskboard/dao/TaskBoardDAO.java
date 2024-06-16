@@ -3,90 +3,44 @@ package com.kuzmych.taskboard.dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kuzmych.taskboard.config.HibernateUtil;
 import com.kuzmych.taskboard.entity.TaskBoard;
-
 
 @Repository
 public class TaskBoardDAO implements ITaskBoardDAO {
 
+	@Autowired
+	private SessionFactory sessionFactory;
+
 	@Override
 	public TaskBoard findById(Long id) {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		TaskBoard taskBoard = session.get(TaskBoard.class, id);
-
-		session.close();
-
-		return taskBoard;
+		return sessionFactory.getCurrentSession().get(TaskBoard.class, id);
 	}
 
 	@Override
 	public List<TaskBoard> findAll() {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		List<TaskBoard> taskBoard = session.createQuery("from TaskBoard", TaskBoard.class).list();
-
-		session.close();
-
-		return taskBoard;
+		return sessionFactory.getCurrentSession().createQuery("from TaskBoard", TaskBoard.class).list();
 	}
 
 	@Override
 	public void save(TaskBoard taskBoard) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-			transaction = session.beginTransaction();
-
-			session.saveOrUpdate(taskBoard);
-
-			transaction.commit();
-
-		} catch (Exception e) {
-
-			if (transaction != null)
-
-				transaction.rollback();
-
-			e.printStackTrace();
-		}
-
+		sessionFactory.getCurrentSession().saveOrUpdate(taskBoard);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			
-			transaction = session.beginTransaction();
-			
-			TaskBoard taskBoard = session.get(TaskBoard.class, id);
-			
-			if (taskBoard != null) {
-				
-				session.delete(taskBoard);
-			}
-			
-			transaction.commit();
-			
-		} catch (Exception e) {
-			
-			if (transaction != null)
-				
-				transaction.rollback();
-			
-			e.printStackTrace();
+		Session session = sessionFactory.getCurrentSession();
+		TaskBoard taskBoard = session.get(TaskBoard.class, id);
+		if (taskBoard != null) {
+			session.delete(taskBoard);
 		}
 	}
 
+	@Override
+	public void update(TaskBoard taskBoard) {
+		sessionFactory.getCurrentSession().update(taskBoard);
+	}
 }

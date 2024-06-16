@@ -14,4 +14,6 @@ public interface ITaskDAO {
 
 	void deleteById(Long id);
 
+	void update(Task task);
+
 }

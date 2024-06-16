@@ -3,90 +3,46 @@ package com.kuzmych.taskboard.dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kuzmych.taskboard.config.HibernateUtil;
 import com.kuzmych.taskboard.entity.User;
 
 
 @Repository
 public class UserDAO implements IUserDAO {
 
+	@Autowired
+	private SessionFactory sessionFactory;
+
 	@Override
 	public User findById(Long id) {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		User user = session.get(User.class, id);
-
-		session.close();
-
-		return user;
+		return sessionFactory.getCurrentSession().get(User.class, id);
 	}
 
 	@Override
 	public List<User> findAll() {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		List<User> users = session.createQuery("from User", User.class).list();
-
-		session.close();
-
-		return users;
+		return sessionFactory.getCurrentSession().createQuery("from User", User.class).list();
 	}
 
 	@Override
 	public void save(User user) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-			transaction = session.beginTransaction();
-
-			session.saveOrUpdate(user);
-
-			transaction.commit();
-
-		} catch (Exception e) {
-
-			if (transaction != null)
-
-				transaction.rollback();
-
-			e.printStackTrace();
-
-		}
+		sessionFactory.getCurrentSession().saveOrUpdate(user);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-			transaction = session.beginTransaction();
-
-			User user = session.get(User.class, id);
-
-			if (user != null) {
-
-				session.delete(user);
-			}
-
-			transaction.commit();
-
-		} catch (Exception e) {
-
-			if (transaction != null)
-
-				transaction.rollback();
-
-			e.printStackTrace();
+		Session session = sessionFactory.getCurrentSession();
+		User user = session.get(User.class, id);
+		if (user != null) {
+			session.delete(user);
 		}
+	}
+
+	@Override
+	public void update(User user) {
+		sessionFactory.getCurrentSession().update(user);
 	}
 
 }

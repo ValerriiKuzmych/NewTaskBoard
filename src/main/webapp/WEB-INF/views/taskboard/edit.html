@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Edit TaskBoard</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 20px;
+	background-color: #f4f4f9;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+	margin-top: 0;
+	color: #333;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+input[type="text"], textarea {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #28a745;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+button:hover {
+	background-color: #218838;
+}
+
+.form-group {
+	margin-bottom: 15px;
+}
+
+.form-actions {
+	display: flex;
+	justify-content: flex-end;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit TaskBoard</h2>
+        <form th:action="@{/taskboards/update}" th:object="${taskBoard}" method="post">
+            <div class="form-group">
+                <label for="name">Name:</label> 
+                <input type="text" id="name" name="name" th:field="*{name}" placeholder="Enter taskboard name">
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" th:field="*{description}" placeholder="Enter taskboard description"></textarea>
+            </div>
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{version}">
+            <div class="form-actions">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

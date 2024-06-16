@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Show TaskBoard</title>
+</head>
+<body>
+    <h1>TaskBoard Details</h1>
+    <div>
+        <label>Name:</label>
+        <span th:text="${taskBoard.name}"></span>
+    </div>
+    
+    <a th:href="@{/taskboards}">Back to TaskBoards List</a>
+</body>
+</html>

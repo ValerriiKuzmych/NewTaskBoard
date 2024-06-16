@@ -10,4 +10,6 @@ public interface IGeneralPageDAO {
 
 	void deleteById(Long id);
 
+	void update(GeneralPage generalPage);
+
 }

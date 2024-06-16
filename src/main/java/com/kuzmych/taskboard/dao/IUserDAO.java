@@ -14,4 +14,6 @@ public interface IUserDAO {
 
 	void deleteById(Long id);
 
+	void update(User user);
+
 }

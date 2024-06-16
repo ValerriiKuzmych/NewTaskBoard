@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
 @ComponentScan(basePackages = "com.kuzmych.taskboard")
@@ -34,6 +35,7 @@ public class SpringConfig implements WebMvcConfigurer {
 		templateResolver.setApplicationContext(applicationContext);
 		templateResolver.setPrefix("/WEB-INF/views/");
 		templateResolver.setSuffix(".html");
+		templateResolver.setTemplateMode(TemplateMode.HTML);
 		return templateResolver;
 	}
 
@@ -65,18 +67,13 @@ public class SpringConfig implements WebMvcConfigurer {
 		return dataSource;
 
 	}
-	
+
 	@Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(false)
-                  .favorParameter(true)
-                  .parameterName("mediaType")
-                  .ignoreAcceptHeader(false)
-                  .useRegisteredExtensionsOnly(false)
-                  .defaultContentType(MediaType.APPLICATION_JSON)
-                  .mediaType("json", MediaType.APPLICATION_JSON)
-                  .mediaType("xml", MediaType.APPLICATION_XML);
-    }
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+		configurer.favorPathExtension(false).favorParameter(true).parameterName("mediaType").ignoreAcceptHeader(false)
+				.useRegisteredExtensionsOnly(false).defaultContentType(MediaType.APPLICATION_JSON)
+				.mediaType("json", MediaType.APPLICATION_JSON).mediaType("xml", MediaType.APPLICATION_XML);
+	}
 
 	@Bean
 	JdbcTemplate jdbcTemplate() {

@@ -14,4 +14,5 @@ public interface ITaskBoardDAO {
 
 	void deleteById(Long id);
 
+	void update(TaskBoard taskBoard);
 }

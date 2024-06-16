@@ -1,76 +1,40 @@
 package com.kuzmych.taskboard.dao;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kuzmych.taskboard.config.HibernateUtil;
 import com.kuzmych.taskboard.entity.GeneralPage;
+import com.kuzmych.taskboard.entity.TaskBoard;
 
 @Repository
 public class GeneralPageDAO implements IGeneralPageDAO {
 
+	@Autowired
+	private SessionFactory sessionFactory;
+
 	@Override
 	public GeneralPage findById(Long id) {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		GeneralPage generalPage = session.get(GeneralPage.class, id);
-
-		session.close();
-
-		return generalPage;
+		return sessionFactory.getCurrentSession().get(GeneralPage.class, id);
 	}
 
 	@Override
 	public void save(GeneralPage generalPage) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-			transaction = session.beginTransaction();
-
-			session.saveOrUpdate(generalPage);
-
-			transaction.commit();
-
-		} catch (Exception e) {
-
-			if (transaction != null)
-				
-				transaction.rollback();
-
-			e.printStackTrace();
-		}
+		sessionFactory.getCurrentSession().saveOrUpdate(generalPage);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-			transaction = session.beginTransaction();
-
-			GeneralPage generalPage = session.get(GeneralPage.class, id);
-
-			if (generalPage != null) {
-
-				session.delete(generalPage);
-			}
-			transaction.commit();
-
-		} catch (Exception e) {
-
-			if (transaction != null)
-
-				transaction.rollback();
-
-			e.printStackTrace();
+		Session session = sessionFactory.getCurrentSession();
+		TaskBoard taskBoard = session.get(TaskBoard.class, id);
+		if (taskBoard != null) {
+			session.delete(taskBoard);
 		}
-
 	}
 
+	@Override
+	public void update(GeneralPage generalPage) {
+		sessionFactory.getCurrentSession().update(generalPage);
+	}
 }

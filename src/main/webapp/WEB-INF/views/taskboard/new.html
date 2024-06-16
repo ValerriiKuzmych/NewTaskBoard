@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New TaskBoard</title>
+    <title>Taskboard create</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-
-<form th:method="POST" th:action="@{/taskboard/new}" th:object="${taskboard}">
-    <label for="name">Enter name: </label>
-    <input type="text" th:field="*{name}" id="name"/>
-    <br/>
-    <label for="id">Enter id: </label>
-    <input type="text" th:field="*{id}" id="id"/>
-    <br/>
-    <br/>
-    <input type="submit" value="Create!"/>
-</form>
-
+    <div class="container mt-5">
+        <h1>Create new Taskboard </h1>
+        <form th:action="@{/taskboards}" th:object="${taskBoard}" method="post">
+            <div class="form-group">
+                
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Taskboard Name" required>
+                 <label for="name">Name</label>
+                 <br>
+                <input type="text" id="description" th:field="*{description}" class="form-control" placeholder="Taskboard Description" required>
+                 <label for="description">Description</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

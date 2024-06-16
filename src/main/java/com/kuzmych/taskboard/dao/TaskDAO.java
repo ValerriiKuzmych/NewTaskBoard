@@ -3,89 +3,47 @@ package com.kuzmych.taskboard.dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kuzmych.taskboard.config.HibernateUtil;
 import com.kuzmych.taskboard.entity.Task;
 
 @Repository
 public class TaskDAO implements ITaskDAO {
 
+	@Autowired
+	private SessionFactory sessionFactory;
+
 	@Override
 	public Task findById(Long id) {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		Task task = session.get(Task.class, id);
-
-		session.close();
-
-		return task;
+		return sessionFactory.getCurrentSession().get(Task.class, id);
 	}
 
 	@Override
 	public List<Task> findAll() {
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		List<Task> taskBoard = session.createQuery("from Task", Task.class).list();
-
-		session.close();
-
-		return taskBoard;
+		return sessionFactory.getCurrentSession().createQuery("from Task", Task.class).list();
 	}
 
 	@Override
 	public void save(Task task) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-			transaction = session.beginTransaction();
-
-			session.saveOrUpdate(task);
-
-			transaction.commit();
-
-		} catch (Exception e) {
-
-			if (transaction != null)
-
-				transaction.rollback();
-
-			e.printStackTrace();
-		}
-
+		sessionFactory.getCurrentSession().saveOrUpdate(task);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-
-		Transaction transaction = null;
-
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-			transaction = session.beginTransaction();
-
-			Task task = session.get(Task.class, id);
-
-			if (task != null) {
-
-				session.delete(task);
-			}
-
-			transaction.commit();
-
-		} catch (Exception e) {
-
-			if (transaction != null)
-
-				transaction.rollback();
-
-			e.printStackTrace();
+		Session session = sessionFactory.getCurrentSession();
+		Task task = session.get(Task.class, id);
+		if (task != null) {
+			session.delete(task);
 		}
 	}
 
+	@Override
+	public void update(Task task) {
+		sessionFactory.getCurrentSession().update(task);
+	}
 }
+
+
+
