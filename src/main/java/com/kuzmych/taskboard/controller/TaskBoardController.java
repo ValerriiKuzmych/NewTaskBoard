@@ -32,10 +32,13 @@ public class TaskBoardController {
 		return "taskboard/show";
 	}
 
-	@GetMapping
-	public List<TaskBoard> getAll() {
-		return taskBoardService.findAll();
-	}
+	 @GetMapping
+	    public String listTaskBoards(Model model) {
+	        List<TaskBoard> taskBoards = taskBoardService.findAll();
+	        model.addAttribute("taskBoards", taskBoards);
+	        return "taskboard/taskboards"; // Ensure the template exists
+	    }
+
 
 	@GetMapping("/new")
 

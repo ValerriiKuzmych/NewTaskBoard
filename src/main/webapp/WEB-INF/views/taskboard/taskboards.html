@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TaskBoards</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
+    <style>
+        .container {
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>All TaskBoards</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="taskBoard : ${taskBoards}">
+                    <td th:text="${taskBoard.id}"></td>
+                    <td th:text="${taskBoard.name}"></td>
+                    <td th:text="${taskBoard.description}"></td>
+                    <td>
+                        <a th:href="@{/taskboards/edit/{id}(id=${taskBoard.id})}">Edit</a>
+                        <form th:action="@{/taskboards/delete/{id}(id=${taskBoard.id})}" method="post" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/taskboards/create">Create New TaskBoard</a>
+    </div>
+</body>
+</html>

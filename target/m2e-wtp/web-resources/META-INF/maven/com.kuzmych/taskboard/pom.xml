@@ -111,11 +111,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.kuzmych.springformvalidation</groupId>
-			<artifactId>spring-formvalidation</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		
 	</dependencies>
 
 	<build>
