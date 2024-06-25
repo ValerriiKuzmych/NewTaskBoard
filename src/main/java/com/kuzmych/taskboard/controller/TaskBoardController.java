@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,36 +31,30 @@ public class TaskBoardController {
 		return "taskboard/show";
 	}
 
-	 @GetMapping
-	    public String listTaskBoards(Model model) {
-	        List<TaskBoard> taskBoards = taskBoardService.findAll();
-	        model.addAttribute("taskBoards", taskBoards);
-	        return "taskboard/taskboards"; // Ensure the template exists
-	    }
-
+	@GetMapping
+	public String listTaskBoards(Model model) {
+		List<TaskBoard> taskBoards = taskBoardService.findAll();
+		model.addAttribute("taskBoards", taskBoards);
+		return "taskboard/taskboards";
+	}
 
 	@GetMapping("/new")
-
 	public String showCreateForm(Model model) {
-
 		model.addAttribute("taskBoard", new TaskBoard());
-
 		return "taskboard/new";
-
 	}
 
 	@PostMapping
-
 	public String createTaskBoard(@ModelAttribute TaskBoard taskBoard) {
-
 		taskBoardService.save(taskBoard);
-
 		return "redirect:/taskboards";
 	}
 
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
+	@GetMapping("/{id}/delete")
+	public String delete(@PathVariable Long id) {
+
 		taskBoardService.delete(id);
+		return "redirect:/taskboards";
 	}
 
 	@GetMapping("/edit/{id}")
@@ -73,11 +66,11 @@ public class TaskBoardController {
 
 			model.addAttribute("taskBoard", taskBoard);
 
-			return "taskboard/edit"; // Make sure this matches the actual template name
+			return "taskboard/edit";
 
 		} else {
 
-			return "redirect:/taskboards";
+			return "redirect:/edit";
 
 		}
 	}

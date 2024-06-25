@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +35,22 @@ public class TaskBoardService implements ITaskBoardService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
-		taskBoardDAO.deleteById(id);
+		TaskBoard taskBoard = taskBoardDAO.findById(id);
+		if (taskBoard != null) {
+			try {
+
+				taskBoardDAO.deleteById(id);
+				System.out.println("Deleted TaskBoard with ID: " + id + " and Version: " + taskBoard.getVersion());
+			} catch (OptimisticLockingFailureException ex) {
+				System.err.println("Failed to delete task board due to optimistic locking conflict. ID: " + id
+						+ " Version: " + taskBoard.getVersion());
+				throw new RuntimeException("Failed to delete task board due to optimistic locking conflict");
+			}
+		} else {
+			throw new EntityNotFoundException("TaskBoard not found with ID: " + id);
+		}
 	}
 
 	@Override
@@ -45,7 +60,6 @@ public class TaskBoardService implements ITaskBoardService {
 			existingTaskBoard.setName(taskBoard.getName());
 			existingTaskBoard.setDescription(taskBoard.getDescription());
 
-			// Ensure version is properly set
 			if (taskBoard.getVersion() == null) {
 				taskBoard.setVersion(0L); // Default version
 			}

@@ -2,22 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Taskboard create</title>
+    <title>Create Taskboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Create new Taskboard </h1>
+        <h1>Create New Taskboard</h1>
         <form th:action="@{/taskboards}" th:object="${taskBoard}" method="post">
             <div class="form-group">
-                
+                <label for="name">Name</label>
                 <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Taskboard Name" required>
-                 <label for="name">Name</label>
-                 <br>
+                <br>
+                <label for="description">Description</label>
                 <input type="text" id="description" th:field="*{description}" class="form-control" placeholder="Taskboard Description" required>
-                 <label for="description">Description</label>
             </div>
-            
             <button type="submit" class="btn btn-primary">Create</button>
         </form>
     </div>
