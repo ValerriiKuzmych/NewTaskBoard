@@ -1,87 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>TaskBoard Details</title>
-<style>
-body {
-	font-family: Arial, sans-serif;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding: 20px;
-}
-
-.container {
-	display: flex;
-	flex-direction: row;
-	width: 100%;
-}
-
-.panel {
-	flex: 1;
-	margin: 10px;
-	padding: 20px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.panel h2 {
-	margin-top: 0;
-}
-
-.settings label, .info label {
-	font-weight: bold;
-}
-
-.settings div, .info div {
-	margin-bottom: 10px;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Taskboard Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-	
-	<div class="container">
-		<!-- Settings Panel -->
-		<div class="panel settings">
-			<h2>Settings</h2>
-			<form action="#" method="post">
-				<div>
-					<label for="name">Name:</label> <input type="text" id="name"
-						name="name" th:value="${taskBoard.name}">
-				</div>
-				<div>
-					<label for="description">Description:</label>
-					<textarea id="description" name="description" rows="4" cols="50"
-						th:text="${taskBoard.description}"></textarea>
-				</div>
-
-				<div>
-					<button type="submit">Save</button>
-				</div>
-				<!-- <div>
-					<label>Tasks:</label>
-					<ul>
-						<li th:each="task : ${taskBoard.tasks}" th:text="${task.name}"></li>
-					</ul>
-				</div> -->
-			</form>
-		</div>
-
-		<!-- Information Panel -->
-		<div class="panel info">
-			<h2>Information</h2>
-			<div>
-				<label>ID:</label> <span th:text="${taskBoard.id}"></span>
-			</div>
-			<div>
-				<label>Name:</label> <span th:text="${taskBoard.name}"></span>
-			</div>
-			<div>
-				<label>Description:</label> <span th:text="${taskBoard.description}"></span>
-			</div>
-
-		</div>
-	</div>
+    <div class="container mt-5">
+        <h1 th:text="${taskBoard.name}">Taskboard Name</h1>
+        <p th:text="${taskBoard.description}">Taskboard Description</p>
+        
+        <h2>Tasks</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Task Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="task : ${taskBoard.tasks}">
+                    <td th:text="${task.name}">Task Name</td>
+                    <td th:text="${task.description}">Task Description</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a th:href="@{|/taskboards/${taskBoard.id}/tasks/new|}" class="btn btn-primary">Add New Task</a>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

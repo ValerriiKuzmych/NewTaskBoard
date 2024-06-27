@@ -2,6 +2,7 @@ package com.kuzmych.taskboard.service;
 
 import java.util.List;
 
+import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 
 public interface ITaskBoardService {
@@ -15,5 +16,7 @@ public interface ITaskBoardService {
 	void update(TaskBoard TaskBoard);
 
 	void delete(Long id) ;
+	
+	public void addTaskToTaskBoard(Long taskBoardId, Task task);
 
 }

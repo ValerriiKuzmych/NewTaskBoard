@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.service.ITaskBoardService;
 
@@ -88,4 +89,17 @@ public class TaskBoardController {
 		}
 		return "redirect:/taskboards";
 	}
+	
+	 @GetMapping("/{id}/tasks/new")
+	    public String showAddTaskForm(@PathVariable Long id, Model model) {
+	        model.addAttribute("task", new Task());
+	        model.addAttribute("taskBoardId", id);
+	        return "taskboard/add-task";
+	    }
+	 
+	 @PostMapping("/{id}/tasks")
+	    public String addTaskToTaskBoard(@PathVariable Long id, @ModelAttribute Task task) {
+	        taskBoardService.addTaskToTaskBoard(id, task);
+	        return "redirect:/taskboards/show/" + id;
+	    }
 }

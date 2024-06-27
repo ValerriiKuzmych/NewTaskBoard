@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kuzmych.taskboard.dao.ITaskBoardDAO;
+import com.kuzmych.taskboard.dao.ITaskDAO;
+import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 
 @Service
@@ -18,6 +20,8 @@ public class TaskBoardService implements ITaskBoardService {
 
 	@Autowired
 	private ITaskBoardDAO taskBoardDAO;
+	@Autowired
+	private ITaskDAO taskDAO;
 
 	@Override
 	public TaskBoard findById(Long id) {
@@ -34,8 +38,15 @@ public class TaskBoardService implements ITaskBoardService {
 		taskBoardDAO.save(taskBoard);
 	}
 
-	@Override
 	@Transactional
+	@Override
+	public void addTaskToTaskBoard(Long taskBoardId, Task task) {
+		TaskBoard taskBoard = taskBoardDAO.findById(taskBoardId);
+		task.setTaskBoard(taskBoard);
+		taskDAO.save(task);
+	}
+
+	@Override
 	public void delete(Long id) {
 		TaskBoard taskBoard = taskBoardDAO.findById(id);
 		if (taskBoard != null) {

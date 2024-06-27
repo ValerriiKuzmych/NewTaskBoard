@@ -14,5 +14,7 @@ public interface ITaskService {
 	void save(Task task);
 
 	void delete(Long id);
+	
+	void update(Task Task);
 
 }
