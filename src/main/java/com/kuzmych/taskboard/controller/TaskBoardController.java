@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.kuzmych.taskboard.entity.GeneralPage;
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.service.ITaskBoardService;
@@ -39,12 +40,6 @@ public class TaskBoardController {
 		return "taskboard/taskboards";
 	}
 
-	@GetMapping("/new")
-	public String showCreateForm(Model model) {
-		model.addAttribute("taskBoard", new TaskBoard());
-		return "taskboard/new";
-	}
-
 	@PostMapping
 	public String createTaskBoard(@ModelAttribute TaskBoard taskBoard) {
 		taskBoardService.save(taskBoard);
@@ -54,8 +49,11 @@ public class TaskBoardController {
 	@GetMapping("/{id}/delete")
 	public String delete(@PathVariable Long id) {
 
+		TaskBoard taskBoard = taskBoardService.findById(id);
+
 		taskBoardService.delete(id);
-		return "redirect:/taskboards";
+		
+		return "redirect:/generalpage/show/" + taskBoard.getGeneralPage().getId();
 	}
 
 	@GetMapping("/edit/{id}")
@@ -63,23 +61,38 @@ public class TaskBoardController {
 
 		TaskBoard taskBoard = taskBoardService.findById(id);
 
-		if (taskBoard != null) {
-
-			model.addAttribute("taskBoard", taskBoard);
-
-			return "taskboard/edit";
-
-		} else {
-
-			return "redirect:/edit";
-
+		if (taskBoard == null) {
+			return "error/404";
 		}
+
+		GeneralPage generalPage = taskBoard.getGeneralPage();
+
+		if (generalPage == null) {
+			return "error/404";
+		}
+
+		model.addAttribute("taskBoard", taskBoard);
+		model.addAttribute("generalPage", generalPage);
+
+		return "taskboard/edit";
 	}
 
 	@PostMapping("/update")
 	public String updateTaskBoard(@ModelAttribute TaskBoard taskBoard, Model model) {
+		GeneralPage generalPage = taskBoard.getGeneralPage();
+
+		if (generalPage == null) {
+			model.addAttribute("error", "GeneralPage is not set for the TaskBoard.");
+			return "taskboard/edit";
+		}
+
+		Long generalPageId = generalPage.getId();
+		System.out.println("GeneralPage ID: " + generalPageId);
+
 		try {
+
 			taskBoardService.update(taskBoard);
+
 		} catch (EntityNotFoundException e) {
 			model.addAttribute("error", "TaskBoard not found. Please try again.");
 			return "taskboard/edit";
@@ -87,19 +100,22 @@ public class TaskBoardController {
 			model.addAttribute("error", "Another user has updated the record. Please refresh and try again.");
 			return "taskboard/edit";
 		}
-		return "redirect:/taskboards";
+
+		System.out.println("Redirecting to /generalpage/show/" + generalPageId);
+
+		return "redirect:/generalpage/show/" + generalPageId;
 	}
-	
-	 @GetMapping("/{id}/tasks/new")
-	    public String showAddTaskForm(@PathVariable Long id, Model model) {
-	        model.addAttribute("task", new Task());
-	        model.addAttribute("taskBoardId", id);
-	        return "taskboard/add-task";
-	    }
-	 
-	 @PostMapping("/{id}/tasks")
-	    public String addTaskToTaskBoard(@PathVariable Long id, @ModelAttribute Task task) {
-	        taskBoardService.addTaskToTaskBoard(id, task);
-	        return "redirect:/taskboards/show/" + id;
-	    }
+
+	@GetMapping("/{id}/tasks/new")
+	public String showAddTaskForm(@PathVariable Long id, Model model) {
+		model.addAttribute("task", new Task());
+		model.addAttribute("taskBoardId", id);
+		return "taskboard/add-task";
+	}
+
+	@PostMapping("/{id}/tasks")
+	public String addTaskToTaskBoard(@PathVariable Long id, @ModelAttribute Task task) {
+		taskBoardService.addTaskToTaskBoard(id, task);
+		return "redirect:/taskboards/show/" + id;
+	}
 }

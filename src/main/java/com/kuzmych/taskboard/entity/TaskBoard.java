@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -18,10 +20,17 @@ public class TaskBoard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long id;
+
 	private String name;
 	private String description;
+
 	@OneToMany(mappedBy = "taskBoard", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Task> tasks;
+
+	@ManyToOne
+	@JoinColumn(name = "general_page_id")
+	private GeneralPage generalPage;
+
 	@Version
 	private Long version;
 
@@ -67,6 +76,14 @@ public class TaskBoard {
 
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
+	}
+
+	public GeneralPage getGeneralPage() {
+		return generalPage;
+	}
+
+	public void setGeneralPage(GeneralPage generalPage) {
+		this.generalPage = generalPage;
 	}
 
 }

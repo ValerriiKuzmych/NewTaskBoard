@@ -8,7 +8,6 @@ public interface IGeneralPageDAO {
 
 	void save(GeneralPage generalPage);
 
-	void deleteById(Long id);
 
 	void update(GeneralPage generalPage);
 

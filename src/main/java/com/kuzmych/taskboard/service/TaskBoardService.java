@@ -14,8 +14,8 @@ import com.kuzmych.taskboard.dao.ITaskDAO;
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 
-@Service
 @Transactional
+@Service
 public class TaskBoardService implements ITaskBoardService {
 
 	@Autowired
@@ -23,16 +23,24 @@ public class TaskBoardService implements ITaskBoardService {
 	@Autowired
 	private ITaskDAO taskDAO;
 
+	@Transactional(readOnly = true)
 	@Override
 	public TaskBoard findById(Long id) {
-		return taskBoardDAO.findById(id);
+		TaskBoard taskBoard = taskBoardDAO.findById(id);
+		if (taskBoard != null) {
+
+			taskBoard.getTasks().size();
+		}
+		return taskBoard;
 	}
 
+	@Transactional
 	@Override
 	public List<TaskBoard> findAll() {
 		return taskBoardDAO.findAll();
 	}
 
+	@Transactional
 	@Override
 	public void save(TaskBoard taskBoard) {
 		taskBoardDAO.save(taskBoard);
@@ -64,9 +72,12 @@ public class TaskBoardService implements ITaskBoardService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public void update(TaskBoard taskBoard) {
-		TaskBoard existingTaskBoard = taskBoardDAO.findById(taskBoard.getId());
+
+		TaskBoard existingTaskBoard = findById(taskBoard.getId());
+
 		if (existingTaskBoard != null) {
 			existingTaskBoard.setName(taskBoard.getName());
 			existingTaskBoard.setDescription(taskBoard.getDescription());

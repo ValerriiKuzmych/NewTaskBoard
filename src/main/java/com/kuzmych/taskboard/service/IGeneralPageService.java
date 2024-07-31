@@ -1,8 +1,7 @@
 package com.kuzmych.taskboard.service;
 
-
-
 import com.kuzmych.taskboard.entity.GeneralPage;
+import com.kuzmych.taskboard.entity.TaskBoard;
 
 public interface IGeneralPageService {
 
@@ -10,6 +9,6 @@ public interface IGeneralPageService {
 
 	void save(GeneralPage generalPage);
 
-	void delete(Long id);
+	void addTaskBoardToGeneralPage(Long generalPageId, TaskBoard taskBoard);
 
 }

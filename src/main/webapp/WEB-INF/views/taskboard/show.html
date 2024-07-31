@@ -1,34 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Taskboard Details</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Taskboard Details</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 th:text="${taskBoard.name}">Taskboard Name</h1>
-        <p th:text="${taskBoard.description}">Taskboard Description</p>
-        
-        <h2>Tasks</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Task Name</th>
-                    <th>Task Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="task : ${taskBoard.tasks}">
-                    <td th:text="${task.name}">Task Name</td>
-                    <td th:text="${task.description}">Task Description</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <a th:href="@{|/taskboards/${taskBoard.id}/tasks/new|}" class="btn btn-primary">Add New Task</a>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<div class="container mt-5">
+		<h1 th:text="${taskBoard.name}">Taskboard Name</h1>
+		<p th:text="${taskBoard.description}">Taskboard Description</p>
+
+		<h2>Tasks</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Task Name</th>
+					<th>Task Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="task : ${taskBoard.tasks}">
+					<td th:text="${task.name}">Task Name</td>
+					<td th:text="${task.description}">Task Description</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<a th:href="@{|/taskboards/${taskBoard.id}/tasks/new|}"
+			class="btn btn-primary">Add New Task</a> <a
+			th:if="${taskBoard.generalPage != null}"
+			th:href="@{|/generalpage/show/${taskBoard.generalPage.id}|}"
+			class="btn btn-secondary">Go to General Page</a>
+
+		<p th:if="${taskBoard.generalPage == null}">General Page not
+			available</p>
+	</div>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

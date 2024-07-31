@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create General Page</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <style>
+        .container {
+            margin: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        button {
+            width: 100px;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create New General Page</h2>
+        <form th:action="@{/generalpage}" th:object="${generalPage}" method="post">
+            <button type="submit">Create</button>
+        </form>
+    </div>
+</body>
+</html>

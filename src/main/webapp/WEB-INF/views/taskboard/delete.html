@@ -26,7 +26,7 @@
     <div class="container">
         <h2>Delete TaskBoard</h2>
         <p>Are you sure you want to delete this task board?</p>
-        <form th:action="@{/taskboards/delete/{id}(id=${taskBoard.id})}" method="get">
+        <form th:action="@{/taskboards/{id}/delete(id=${taskBoard.id})}" method="get">
             <input type="hidden" name="_method" value="delete" />
             <button type="submit">Delete</button>
         </form>
