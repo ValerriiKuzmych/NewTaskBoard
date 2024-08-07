@@ -23,6 +23,8 @@
 				<tr th:each="task : ${taskBoard.tasks}">
 					<td th:text="${task.name}">Task Name</td>
 					<td th:text="${task.description}">Task Description</td>
+					<td><a th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a>
+					<td><a th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a>
 				</tr>
 			</tbody>
 		</table>

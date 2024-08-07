@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kuzmych.taskboard.entity.Task;
+import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.service.ITaskService;
 
 @Controller
@@ -53,8 +54,10 @@ public class TaskController {
 	@GetMapping("/{id}/delete")
 	public String delete(@PathVariable Long id) {
 
+		Task task = taskService.findById(id);
 		taskService.delete(id);
-		return "redirect:/tasks";
+
+		return "redirect:/taskboards/show/" + task.getTaskBoard().getId();
 	}
 
 	@GetMapping("/edit/{id}")
@@ -62,23 +65,38 @@ public class TaskController {
 
 		Task task = taskService.findById(id);
 
-		if (task != null) {
-
-			model.addAttribute("task", task);
-
-			return "task/edit";
-
-		} else {
-
-			return "redirect:/edit";
-
+		if (task == null) {
+			return "error/404";
 		}
+
+		TaskBoard taskBoard = task.getTaskBoard();
+
+		if (taskBoard == null) {
+			return "error/404";
+		}
+
+		model.addAttribute("task", task);
+		model.addAttribute("taskBoard", taskBoard);
+
+		return "task/edit";
 	}
 
 	@PostMapping("/update")
 	public String updateTask(@ModelAttribute Task task, Model model) {
+		TaskBoard taskBoard = task.getTaskBoard();
+
+		if (taskBoard == null) {
+			model.addAttribute("error", "TaskBoard is not set for the Task.");
+			return "task/edit";
+		}
+
+		Long taskBoardId = taskBoard.getId();
+		System.out.println("TaskBoard ID: " + taskBoardId);
+
 		try {
+
 			taskService.update(task);
+
 		} catch (EntityNotFoundException e) {
 			model.addAttribute("error", "Task not found. Please try again.");
 			return "task/edit";
@@ -86,7 +104,10 @@ public class TaskController {
 			model.addAttribute("error", "Another user has updated the record. Please refresh and try again.");
 			return "task/edit";
 		}
-		return "redirect:/tasks";
+
+		System.out.println("Redirecting to /tasks/show/" + taskBoardId);
+
+		return "redirect:/taskboards/show/" + taskBoardId;
 	}
 
 }

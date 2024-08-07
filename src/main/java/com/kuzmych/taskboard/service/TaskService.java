@@ -7,26 +7,32 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kuzmych.taskboard.dao.ITaskDAO;
 import com.kuzmych.taskboard.entity.Task;
 
+@Transactional
 @Service
 public class TaskService implements ITaskService {
 
 	@Autowired
 	private ITaskDAO taskDAO;
 
+	@Transactional(readOnly = true)
 	@Override
 	public Task findById(Long id) {
+
 		return taskDAO.findById(id);
 	}
 
+	@Transactional
 	@Override
 	public List<Task> findAll() {
 		return taskDAO.findAll();
 	}
 
+	@Transactional
 	@Override
 	public void save(Task task) {
 		taskDAO.save(task);
@@ -50,9 +56,12 @@ public class TaskService implements ITaskService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public void update(Task task) {
+
 		Task existingTask = taskDAO.findById(task.getId());
+
 		if (existingTask != null) {
 			existingTask.setName(task.getName());
 			existingTask.setDescription(task.getDescription());
