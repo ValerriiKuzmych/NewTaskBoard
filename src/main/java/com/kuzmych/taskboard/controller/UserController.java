@@ -1,7 +1,5 @@
 package com.kuzmych.taskboard.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +24,7 @@ public class UserController {
 		return userService.findById(id);
 	}
 
-	@GetMapping
-	public List<User> getAll() {
-		return userService.findAll();
-	}
+	
 
 	@PostMapping
 	public void create(@RequestBody User user) {
