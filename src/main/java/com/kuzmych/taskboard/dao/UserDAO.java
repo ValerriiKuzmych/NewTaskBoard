@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.kuzmych.taskboard.entity.User;
 
-
 @Repository
 public class UserDAO implements IUserDAO {
 
@@ -43,6 +42,12 @@ public class UserDAO implements IUserDAO {
 	@Override
 	public void update(User user) {
 		sessionFactory.getCurrentSession().update(user);
+	}
+
+	@Override
+	public User findByUserName(String userName) {
+
+		return sessionFactory.getCurrentSession().get(User.class, userName);
 	}
 
 }

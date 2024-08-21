@@ -13,5 +13,8 @@ public interface IUserService {
 	void update(User user);
 
 	void delete(Long id);
+	
+	boolean authenticateUser(String username, String plainPassword);
+	
 
 }

@@ -6,34 +6,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.kuzmych.taskboard.service.IUserService;
+
 @Controller
 
 @RequestMapping("/loginpage")
 public class LoginController {
 
+	private IUserService userService;
+
 	@GetMapping("/login")
-	public String showLoginForm() {
+	public String showUserLoginForm() {
 
 		return "/login/login";
 
 	}
 
 	@PostMapping
-	public String login(@RequestParam String username, @RequestParam String password) {
+	public String userLogin(@RequestParam String username, @RequestParam String password) {
 
-		boolean isAuthenticated = authenticateUser(username, password);
+		boolean isAuthenticated = userService.authenticateUser(username, password);
 
 		if (isAuthenticated) {
 			return "redirect:/taskboard/generalpage/";
 		} else {
 			return "/login";
 		}
-	}
-
-	private boolean authenticateUser(String username, String password) {
-		// Implement your authentication logic here
-		return true; // Placeholder
-
 	}
 
 }

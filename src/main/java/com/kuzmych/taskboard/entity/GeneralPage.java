@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -18,12 +19,14 @@ public class GeneralPage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long id;
-	
+
 	@OneToMany(mappedBy = "generalPage", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TaskBoard> taskBoards;
-	
-	@OneToOne(mappedBy = "generalPage")
+
+	@OneToOne
+	@JoinColumn(name = "user_id") // This creates a foreign key column in the 'general_page' table.
 	private User user;
+	
 
 	public GeneralPage() {
 

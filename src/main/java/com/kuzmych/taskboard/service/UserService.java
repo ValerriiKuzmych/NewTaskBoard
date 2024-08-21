@@ -6,14 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kuzmych.taskboard.dao.UserDAO;
+import com.kuzmych.taskboard.dao.IGeneralPageDAO;
+import com.kuzmych.taskboard.dao.IUserDAO;
+import com.kuzmych.taskboard.entity.GeneralPage;
 import com.kuzmych.taskboard.entity.User;
 
 @Service
 public class UserService implements IUserService {
 
 	@Autowired
-	private UserDAO userDAO;
+	private IUserDAO userDAO;
+	@Autowired
+	private PasswordService passwordService;
+	@Autowired
+	private IGeneralPageDAO generalPageDAO;
 
 	@Transactional(readOnly = true)
 	@Override
@@ -26,7 +32,11 @@ public class UserService implements IUserService {
 	@Override
 	public void save(User user) {
 
-		userDAO.save(user);
+		user.setPassword(passwordService.hashPassword(user.getPassword()));
+
+		User userWithGeneralPage = createGeneralPageForNewUser(user);
+
+		userDAO.save(userWithGeneralPage);
 	}
 
 	@Override
@@ -54,6 +64,31 @@ public class UserService implements IUserService {
 		} else {
 			throw new EntityNotFoundException("User not found");
 		}
+	}
+
+	public boolean authenticateUser(String username, String plainPassword) {
+
+		User user = userDAO.findByUserName(username);
+
+		if (user != null) {
+
+			return passwordService.checkPassword(plainPassword, user.getPassword());
+		}
+		return false;
+	}
+
+	public User createGeneralPageForNewUser(User user) {
+
+		GeneralPage generalPage = new GeneralPage();
+
+		generalPage.setUser(user);
+
+		generalPageDAO.save(generalPage);
+
+		user.setGeneralPage(generalPage);
+
+		return user;
+
 	}
 
 }

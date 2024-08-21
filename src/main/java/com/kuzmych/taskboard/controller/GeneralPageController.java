@@ -41,22 +41,22 @@ public class GeneralPageController {
 		return "generalpage/show-generalpage";
 	}
 
-	@GetMapping("/new")
-
-	public String showCreateGeneralPageForm(Model model) {
-
-		model.addAttribute("generalPage", new GeneralPage());
-
-		return "generalpage/new-generalpage";
-	}
-
-	@PostMapping
-	public String createGeneralPage(@ModelAttribute GeneralPage generalPage) {
-
-		generalPageService.save(generalPage);
-
-		return "redirect:/generalpage";
-	}
+//	@GetMapping("/new")
+//
+//	public String showCreateGeneralPageForm(Model model) {
+//
+//		model.addAttribute("generalPage", new GeneralPage());
+//
+//		return "generalpage/new-generalpage";
+//	}
+//
+//	@PostMapping
+//	public String createGeneralPage(@ModelAttribute GeneralPage generalPage) {
+//
+//		generalPageService.save(generalPage);
+//
+//		return "redirect:/generalpage";
+//	}
 
 	@GetMapping("/{id}/taskboards/new")
 	public String showAddTaskBoardForm(@PathVariable Long id, Model model) {
