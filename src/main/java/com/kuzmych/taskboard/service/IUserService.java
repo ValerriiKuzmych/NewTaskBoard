@@ -1,5 +1,6 @@
 package com.kuzmych.taskboard.service;
 
+import com.kuzmych.taskboard.dto.UserRegistrationDTO;
 import com.kuzmych.taskboard.entity.User;
 
 
@@ -16,5 +17,6 @@ public interface IUserService {
 	
 	boolean authenticateUser(String username, String plainPassword);
 	
+	public User convertingToUser(UserRegistrationDTO userDTO);
 
 }

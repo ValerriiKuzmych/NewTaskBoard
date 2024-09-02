@@ -9,7 +9,7 @@
 <body>
 	<div class="container mt-5">
 		<h2>User Registration</h2>
-		<form th:action="@{/register}" th:object="${user}" method="post">
+		<form th:action="@{/users/register}" th:object="${userDTO}" method="post">
 			<div class="form-group">
 				<label for="name">Name</label> <input type="text" id="name"
 					th:field="*{name}" class="form-control"

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kuzmych.taskboard.dao.IGeneralPageDAO;
 import com.kuzmych.taskboard.dao.IUserDAO;
+import com.kuzmych.taskboard.dto.UserRegistrationDTO;
 import com.kuzmych.taskboard.entity.GeneralPage;
 import com.kuzmych.taskboard.entity.User;
 
@@ -89,6 +90,21 @@ public class UserService implements IUserService {
 
 		return user;
 
+	}
+	
+	@Override
+	public User convertingToUser(UserRegistrationDTO userDTO) {
+		
+		User user = new User();
+		
+		user.setEmail(userDTO.getEmail());
+		user.setName(userDTO.getName());
+		user.setLogin(userDTO.getLogin());
+		user.setPassword(userDTO.getPassword());
+		
+		
+		return user;
+		
 	}
 
 }

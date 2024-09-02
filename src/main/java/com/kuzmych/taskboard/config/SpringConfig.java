@@ -37,6 +37,7 @@ public class SpringConfig implements WebMvcConfigurer {
 		templateResolver.setPrefix("/WEB-INF/views/");
 		templateResolver.setSuffix(".html");
 		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
 		return templateResolver;
 	}
 
@@ -82,11 +83,10 @@ public class SpringConfig implements WebMvcConfigurer {
 		return new JdbcTemplate(dataSource());
 
 	}
-	
-	@Bean
-    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
-        return new HiddenHttpMethodFilter();
-    }
 
-   
+	@Bean
+	public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+		return new HiddenHttpMethodFilter();
+	}
+
 }

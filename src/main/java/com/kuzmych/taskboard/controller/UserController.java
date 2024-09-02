@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.kuzmych.taskboard.dto.UserRegistrationDTO;
 import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.service.IUserService;
 
@@ -25,30 +27,39 @@ public class UserController {
 
 		User user = userService.findById(id);
 
-		model.addAttribute("user", user);
+		if (user != null) {
 
-		return "user-details";
+			model.addAttribute("user", user);
+
+			return "user/user-details";
+
+		} else {
+
+			return "error/404";
+		}
 	}
 
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
 
-		model.addAttribute("user", new User());
+		model.addAttribute("userDTO", new UserRegistrationDTO());
 
 		return "user/user-registration";
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@ModelAttribute("user") User user, BindingResult result) {
+	public String registerUser(@ModelAttribute("userDTO") UserRegistrationDTO userDTO, BindingResult result) {
 
 		if (result.hasErrors()) {
 
 			return "user/user-registration";
 		}
 
+		User user = userService.convertingToUser(userDTO);
+
 		userService.save(user);
 
-		return "redirect:/user/user-details/" + user.getId();
+		return "redirect:/users/" + user.getId();
 	}
 
 	@DeleteMapping("/{id}")
