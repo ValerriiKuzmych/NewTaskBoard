@@ -29,6 +29,12 @@ public class UserService implements IUserService {
 		return userDAO.findById(id);
 	}
 
+	@Transactional(readOnly = true)
+	@Override
+	public User findByUserName(String userName) {
+		return userDAO.findByUserName(userName);
+	}
+
 	@Transactional
 	@Override
 	public void save(User user) {
@@ -66,7 +72,7 @@ public class UserService implements IUserService {
 			throw new EntityNotFoundException("User not found");
 		}
 	}
-
+	@Transactional
 	public boolean authenticateUser(String username, String plainPassword) {
 
 		User user = userDAO.findByUserName(username);
@@ -91,20 +97,19 @@ public class UserService implements IUserService {
 		return user;
 
 	}
-	
+
 	@Override
 	public User convertingToUser(UserRegistrationDTO userDTO) {
-		
+
 		User user = new User();
-		
+
 		user.setEmail(userDTO.getEmail());
 		user.setName(userDTO.getName());
 		user.setLogin(userDTO.getLogin());
 		user.setPassword(userDTO.getPassword());
-		
-		
+
 		return user;
-		
+
 	}
 
 }

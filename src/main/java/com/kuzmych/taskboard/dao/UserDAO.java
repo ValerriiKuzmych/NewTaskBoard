@@ -46,8 +46,9 @@ public class UserDAO implements IUserDAO {
 
 	@Override
 	public User findByUserName(String userName) {
-
-		return sessionFactory.getCurrentSession().get(User.class, userName);
+		String hql = "FROM User WHERE login = :userName";
+		return (User) sessionFactory.getCurrentSession().createQuery(hql).setParameter("userName", userName)
+				.uniqueResult();
 	}
 
 }

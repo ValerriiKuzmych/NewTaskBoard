@@ -8,6 +8,7 @@ public interface IUserDAO {
 
 	User findById(Long id);
 	
+	
 	User findByUserName(String userName);
 
 	List<User> findAll();

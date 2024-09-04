@@ -17,20 +17,18 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long id;
-	
+
 	private String name;
 	private String email;
 	private String login;
 	private String password;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "general_page_id")
 	private GeneralPage generalPage;
-	
+
 	@Version
 	private Long version;
-	
-	
 
 	public Long getVersion() {
 		return version;

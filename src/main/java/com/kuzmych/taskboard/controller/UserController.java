@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kuzmych.taskboard.dto.UserRegistrationDTO;
 import com.kuzmych.taskboard.entity.User;
@@ -61,6 +62,28 @@ public class UserController {
 
 		return "redirect:/users/" + user.getId();
 	}
+
+	@GetMapping("/login")
+	public String showUserLoginForm() {
+
+		return "/user/login";
+
+	}
+
+	@PostMapping("/login")
+	public String userLogin(@RequestParam String userName, @RequestParam String password) {
+		
+		boolean isAuthenticated = userService.authenticateUser(userName, password);
+
+		if (isAuthenticated) {
+			User user = userService.findByUserName(userName);
+			return "redirect:/users/" + user.getId();
+		} else {
+			return "redirect:/test";
+		}
+	}
+
+	
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
