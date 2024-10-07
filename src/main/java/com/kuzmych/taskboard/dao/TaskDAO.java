@@ -27,9 +27,8 @@ public class TaskDAO implements ITaskDAO {
 
 	@Override
 	public void save(Task task) {
-		System.out.println(
-				"Saving Task in DAO: " + task.getName() + ", Description: " + task.getDescription());
-		
+		System.out.println("Saving Task in DAO: " + task.getName() + ", Description: " + task.getDescription());
+
 		sessionFactory.getCurrentSession().saveOrUpdate(task);
 	}
 
@@ -47,6 +46,3 @@ public class TaskDAO implements ITaskDAO {
 		sessionFactory.getCurrentSession().update(task);
 	}
 }
-
-
-

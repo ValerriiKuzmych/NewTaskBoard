@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Add Task</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Add Task</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Add New Task</h1>
-        <form th:action="@{/taskboards/{id}/tasks(id=${taskBoardId})}" th:object="${task}" method="post">
-            <div class="form-group">
-                <label for="name">Task Name</label>
-                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Task Name" required>
-                <br>
-                <label for="description">Task Description</label>
-                <input type="text" id="description" th:field="*{description}" class="form-control" placeholder="Task Description" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Task</button>
-        </form>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>.
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<div class="container mt-5">
+		<h1>Add New Task</h1>
+		<form th:action="@{/taskboards/{id}/tasks(id=${taskBoardId})}"
+			th:object="${task}" method="post">
+			<div class="form-group">
+				<label for="name">Task Name</label> <input type="text" id="name"
+					th:field="*{name}" class="form-control" placeholder="Task Name"
+					required> <br> <label for="description">Task
+					Description</label> <input type="text" id="description"
+					th:field="*{description}" class="form-control"
+					placeholder="Task Description" required>
+			</div>
+			<button type="submit" class="btn btn-primary">Add Task</button>
+		</form>
+	</div>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	.
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

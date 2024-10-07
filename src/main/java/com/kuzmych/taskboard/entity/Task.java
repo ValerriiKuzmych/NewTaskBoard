@@ -18,13 +18,13 @@ public class Task {
 	private long id;
 	private String name;
 	private String description;
+	private String filePath;
+
 	@ManyToOne
 	@JoinColumn(name = "task_board_id")
 	private TaskBoard taskBoard;
 	@Version
 	private Long version;
-
-	
 
 	public Task() {
 
@@ -68,5 +68,13 @@ public class Task {
 
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 }

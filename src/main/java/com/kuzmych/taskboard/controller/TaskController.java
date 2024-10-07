@@ -1,11 +1,12 @@
 package com.kuzmych.taskboard.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
@@ -62,8 +65,9 @@ public class TaskController {
 
 	@GetMapping("/edit/{id}")
 	public String editTaskForm(@PathVariable Long id, Model model) {
-
 		Task task = taskService.findById(id);
+
+		System.out.println("Editing Task ID: " + id + " - Task: " + task);
 
 		if (task == null) {
 			return "error/404";
@@ -82,32 +86,28 @@ public class TaskController {
 	}
 
 	@PostMapping("/update")
-	public String updateTask(@ModelAttribute Task task, Model model) {
-		TaskBoard taskBoard = task.getTaskBoard();
+	public String updateTask(@RequestParam("id") Long id, @ModelAttribute Task task,
+			@RequestParam(value = "file", required = false) MultipartFile file, Model model) {
 
-		if (taskBoard == null) {
-			model.addAttribute("error", "TaskBoard is not set for the Task.");
-			return "task/edit";
+		task.setId(id);
+		System.out.println("Updating Task ID: " + task.getId());
+		System.out.println("Uploading File: " + file);
+
+		if (file != null && !file.isEmpty()) {
+			try {
+				String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+				Path filePath = Paths.get("C:\\TaskBoard\\uploads_files_for_tasks\\" + fileName);
+				System.out.println("filepath: " + filePath);
+				Files.write(filePath, file.getBytes());
+				task.setFilePath(filePath.toString());
+			} catch (IOException e) {
+				model.addAttribute("error", "File upload failed: " + e.getMessage());
+				return "task/edit";
+			}
 		}
 
-		Long taskBoardId = taskBoard.getId();
-		System.out.println("TaskBoard ID: " + taskBoardId);
-
-		try {
-
-			taskService.update(task);
-
-		} catch (EntityNotFoundException e) {
-			model.addAttribute("error", "Task not found. Please try again.");
-			return "task/edit";
-		} catch (OptimisticLockingFailureException e) {
-			model.addAttribute("error", "Another user has updated the record. Please refresh and try again.");
-			return "task/edit";
-		}
-
-		System.out.println("Redirecting to /tasks/show/" + taskBoardId);
-
-		return "redirect:/taskboards/show/" + taskBoardId;
+		taskService.update(task);
+		return "redirect:/taskboards/show/" + taskService.findById(id).getTaskBoard().getId();
 	}
 
 }

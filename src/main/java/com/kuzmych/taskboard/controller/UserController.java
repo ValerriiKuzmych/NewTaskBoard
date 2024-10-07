@@ -77,7 +77,7 @@ public class UserController {
 
 		if (isAuthenticated) {
 			User user = userService.findByUserName(userName);
-			return "redirect:/users/" + user.getId();
+			return "redirect:/generalpage/show/" + user.getGeneralPage().getId();
 		} else {
 			return "redirect:/test";
 		}

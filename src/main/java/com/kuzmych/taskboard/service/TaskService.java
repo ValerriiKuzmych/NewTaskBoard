@@ -60,22 +60,18 @@ public class TaskService implements ITaskService {
 	@Override
 	public void update(Task task) {
 
+		System.out.println("Updating Task ID: " + task.getId());
+
 		Task existingTask = taskDAO.findById(task.getId());
 
 		if (existingTask != null) {
 			existingTask.setName(task.getName());
 			existingTask.setDescription(task.getDescription());
-
-			if (task.getVersion() == null) {
-				task.setVersion(0L); // Default version
-			}
-
 			existingTask.setVersion(task.getVersion());
 
 			taskDAO.update(existingTask);
-			System.out.println("Updated Task: " + existingTask);
 		} else {
-			throw new EntityNotFoundException("Task not found");
+			throw new EntityNotFoundException("Task not found with ID: " + task.getId());
 		}
 	}
 
