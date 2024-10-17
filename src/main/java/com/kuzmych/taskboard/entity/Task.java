@@ -1,5 +1,8 @@
 package com.kuzmych.taskboard.entity;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +22,11 @@ public class Task {
 	private String name;
 	private String description;
 	private String filePath;
-
+	
+	
+	@Column(name = "created_date", nullable = false, updatable = false)
+	private LocalDateTime createdDate;
+	
 	@ManyToOne
 	@JoinColumn(name = "task_board_id")
 	private TaskBoard taskBoard;
@@ -44,7 +51,14 @@ public class Task {
 
 	public void setName(String name) {
 		this.name = name;
+	}public LocalDateTime getCreatedDate() {
+		return createdDate;
 	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
 
 	public String getDescription() {
 		return description;

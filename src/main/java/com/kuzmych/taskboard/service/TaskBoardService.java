@@ -1,5 +1,6 @@
 package com.kuzmych.taskboard.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -51,6 +52,7 @@ public class TaskBoardService implements ITaskBoardService {
 	public void addTaskToTaskBoard(Long taskBoardId, Task task) {
 		TaskBoard taskBoard = taskBoardDAO.findById(taskBoardId);
 		task.setTaskBoard(taskBoard);
+		task.setCreatedDate(LocalDateTime.now());
 		taskDAO.save(task);
 	}
 

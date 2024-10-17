@@ -11,33 +11,44 @@
 		<h1 th:text="${taskBoard.name}">Taskboard Name</h1>
 		<p th:text="${taskBoard.description}">Taskboard Description</p>
 
+		<!-- Tasks Section -->
 		<h2>Tasks</h2>
 		<table class="table table-striped">
 			<thead>
 				<tr>
 					<th>Task Name</th>
 					<th>Task Description</th>
+					<th>Actions</th>
+					<th>Created Date</th>
+
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="task : ${taskBoard.tasks}">
 					<td th:text="${task.name}">Task Name</td>
 					<td th:text="${task.description}">Task Description</td>
-					<td><a th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a>
-					<td><a th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a>
+
+					<td><a th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a> |
+						<a th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a></td>
+					<td
+						th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}"></td>
+
 				</tr>
 			</tbody>
 		</table>
 
+		<!-- Buttons for adding tasks and navigating -->
 		<a th:href="@{|/taskboards/${taskBoard.id}/tasks/new|}"
 			class="btn btn-primary">Add New Task</a> <a
 			th:if="${taskBoard.generalPage != null}"
 			th:href="@{|/generalpage/show/${taskBoard.generalPage.id}|}"
 			class="btn btn-secondary">Go to General Page</a>
 
+		<!-- Message if General Page is not available -->
 		<p th:if="${taskBoard.generalPage == null}">General Page not
 			available</p>
 	</div>
+
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script

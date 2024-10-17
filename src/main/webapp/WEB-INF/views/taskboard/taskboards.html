@@ -52,8 +52,8 @@ a:hover {
 					<td th:text="${taskBoard.name}"></td>
 					<td th:text="${taskBoard.description}"></td>
 					<td><a th:href="@{/taskboards/edit/{id}(id=${taskBoard.id})}">Edit</a>
-					<td><a th:href="@{/taskboards/{id}/delete(id=${taskBoard.id})}">Delete</a>
-						
+					<td><a
+						th:href="@{/taskboards/{id}/delete(id=${taskBoard.id})}">Delete</a>
 				</tr>
 			</tbody>
 		</table>
