@@ -36,7 +36,7 @@ public class TaskService implements ITaskService {
 	@Transactional
 	@Override
 	public void save(Task task) {
-		 
+
 		task.setCreatedDate(LocalDateTime.now());
 		taskDAO.save(task);
 	}
@@ -71,7 +71,7 @@ public class TaskService implements ITaskService {
 			existingTask.setName(task.getName());
 			existingTask.setDescription(task.getDescription());
 			existingTask.setVersion(task.getVersion());
-
+			existingTask.setFilePath(task.getFilePath());
 			taskDAO.update(existingTask);
 		} else {
 			throw new EntityNotFoundException("Task not found with ID: " + task.getId());
