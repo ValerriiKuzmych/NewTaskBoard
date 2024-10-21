@@ -94,7 +94,12 @@ button:hover {
 				<label for="file">File max. 9.5Mb</label> <input type="file"
 					id="file" name="file" class="form-control" />
 			</div>
-
+			<label for="priority">Priority:</label> <select id="priority"
+				th:field="*{priority}">
+				<option th:value="LOW">Low</option>
+				<option th:value="MEDIUM">Medium</option>
+				<option th:value="HIGH">High</option>
+			</select>
 
 			<button type="submit" class="btn btn-primary">Update Task</button>
 		</form>

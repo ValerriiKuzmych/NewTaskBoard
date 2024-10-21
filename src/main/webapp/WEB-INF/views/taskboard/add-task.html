@@ -18,7 +18,15 @@
 					Description</label> <input type="text" id="description"
 					th:field="*{description}" class="form-control"
 					placeholder="Task Description" required>
+
 			</div>
+			<label for="priority">Priority:</label>
+			<select id="priority"
+				th:field="*{priority}">
+				<option th:value="LOW">Low</option>
+				<option th:value="MEDIUM">Medium</option>
+				<option th:value="HIGH">High</option>
+			</select>
 			<button type="submit" class="btn btn-primary">Add Task</button>
 		</form>
 	</div>
