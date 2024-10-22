@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.kuzmych.taskboard.dao.Priority;
-
 @Entity
 @Table(name = "task")
 public class Task {
@@ -29,7 +27,11 @@ public class Task {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "priority", nullable = false)
-	private Priority priority;
+	private TaskPriority priority;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false)
+	private TaskStatus taskStatus;
 
 	@Column(name = "created_date", nullable = false, updatable = false)
 	private LocalDateTime createdDate;
@@ -42,6 +44,14 @@ public class Task {
 
 	public Task() {
 
+	}
+
+	public TaskStatus getTaskStatus() {
+		return taskStatus;
+	}
+
+	public void setTaskStatus(TaskStatus taskStatus) {
+		this.taskStatus = taskStatus;
 	}
 
 	public long getId() {
@@ -100,11 +110,11 @@ public class Task {
 		this.filePath = filePath;
 	}
 
-	public Priority getPriority() {
+	public TaskPriority getPriority() {
 		return priority;
 	}
 
-	public void setPriority(Priority priority) {
+	public void setPriority(TaskPriority priority) {
 		this.priority = priority;
 	}
 }

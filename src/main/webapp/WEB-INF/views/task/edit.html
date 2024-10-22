@@ -99,7 +99,15 @@ button:hover {
 				<option th:value="LOW">Low</option>
 				<option th:value="MEDIUM">Medium</option>
 				<option th:value="HIGH">High</option>
+
+			</select> <label for="status">Status:</label> <select id="taskStatus"
+				th:field="*{taskStatus}">
+				<option th:value="NEW">New</option>
+				<option th:value="IN_PROGRESS">In Progress</option>
+				<option th:value="COMPLETED">Completed</option>
+				<option th:value="ON_HOLD">On Hold</option>
 			</select>
+
 
 			<button type="submit" class="btn btn-primary">Update Task</button>
 		</form>
