@@ -2,6 +2,8 @@ package com.kuzmych.taskboard.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kuzmych.taskboard.entity.GeneralPage;
 import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.service.IGeneralPageService;
 
 @Controller
@@ -23,21 +26,24 @@ public class GeneralPageController {
 	private IGeneralPageService generalPageService;
 
 	@GetMapping("/show/{id}")
-	public String showGeneralPage(@PathVariable Long id, Model model) {
+	public String showGeneralPage(@PathVariable Long id, Model model, HttpSession session) {
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
 
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
 		GeneralPage generalPage = generalPageService.findById(id);
 
-		if (generalPage == null) {
-
-			return "error/404";
+		if (generalPage == null || !generalPage.getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403"; // display a 403 error page for unauthorized access
 		}
-		
-		 List<TaskBoard> taskBoards = generalPage.getTaskBoards();
-		 
-		    model.addAttribute("generalPage", generalPage);
-		    
-		    model.addAttribute("taskBoards", taskBoards);
-		    
+
+		List<TaskBoard> taskBoards = generalPage.getTaskBoards();
+
+		model.addAttribute("generalPage", generalPage);
+
+		model.addAttribute("taskBoards", taskBoards);
+
 		return "generalpage/show-generalpage";
 	}
 

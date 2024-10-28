@@ -97,5 +97,4 @@ public class SpringConfig implements WebMvcConfigurer {
 		return new HiddenHttpMethodFilter();
 	}
 
-	
 }

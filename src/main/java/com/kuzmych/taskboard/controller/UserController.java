@@ -1,5 +1,7 @@
 package com.kuzmych.taskboard.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,12 +73,14 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String userLogin(@RequestParam String userName, @RequestParam String password) {
+	public String userLogin(@RequestParam String userName, @RequestParam String password, HttpSession session) {
 		
 		boolean isAuthenticated = userService.authenticateUser(userName, password);
 
 		if (isAuthenticated) {
 			User user = userService.findByUserName(userName);
+			session.setAttribute("loggedInUser", user);
+			
 			return "redirect:/generalpage/show/" + user.getGeneralPage().getId();
 		} else {
 			return "redirect:/test";
@@ -90,4 +94,6 @@ public class UserController {
 
 		userService.delete(id);
 	}
+	
+	
 }

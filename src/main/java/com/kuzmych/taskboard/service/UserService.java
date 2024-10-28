@@ -72,6 +72,7 @@ public class UserService implements IUserService {
 			throw new EntityNotFoundException("User not found");
 		}
 	}
+
 	@Transactional
 	public boolean authenticateUser(String username, String plainPassword) {
 
@@ -111,5 +112,12 @@ public class UserService implements IUserService {
 		return user;
 
 	}
+	
+	
+
+	public boolean checkUserAccess(User user) {
+
+		return false;
+	};
 
 }
