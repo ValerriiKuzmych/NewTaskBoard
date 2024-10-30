@@ -60,6 +60,10 @@ a:hover {
 		</table>
 		<a th:href="@{/generalpage/{id}/taskboards/new(id=${generalPage.id})}">Create
 			New TaskBoard</a>
+		<form action="#" th:action="@{/users/logout}" method="post"
+			style="display: inline;">
+			<button type="submit">Logout</button>
+		</form>
 	</div>
 </body>
 </html>

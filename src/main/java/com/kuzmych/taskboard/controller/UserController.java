@@ -88,7 +88,13 @@ public class UserController {
 	}
 
 	
-
+	@PostMapping("/logout")
+	public String logout(HttpSession session) {
+	    session.invalidate();
+	    return "redirect:/users/login";
+	}
+	
+	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 
