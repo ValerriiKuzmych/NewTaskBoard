@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
@@ -65,5 +65,66 @@ a:hover {
 			<button type="submit">Logout</button>
 		</form>
 	</div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Page</title>
+<link rel="stylesheet" th:href="@{/resources/css/styles.css}">
+</head>
+<body>
+
+	<div class="sidebar">
+		<h2>Settings</h2>
+		<ul>
+			<li><a href="#">Profile</a></li>
+			<li><a href="#">Preferences</a></li>
+			<li><a href="/logout">Logout</a></li>
+		</ul>
+	</div>
+
+	<div class="main-content">
+		<h1>TaskBoards</h1>
+		<div class="taskboard-container">
+			<div class="taskboard-card" onclick="showTaskBoardDetail()">
+				<h3>TaskBoard 1</h3>
+				<p>Short description of TaskBoard 1.</p>
+			</div>
+			<div class="taskboard-card" onclick="showTaskBoardDetail()">
+				<h3>TaskBoard 2</h3>
+				<p>Short description of TaskBoard 2.</p>
+			</div>
+		</div>
+
+		<div class="taskboard-detail" id="taskboard-detail">
+			<h2>Tasks for TaskBoard 1</h2>
+			<div class="tasks-container">
+				<div class="task-column">
+					<h3>To Do</h3>
+					<div class="task-card" onclick="showTaskDetail()">
+						<p>Task Name</p>
+						<p>Short description...</p>
+					</div>
+				</div>
+				<div class="task-column">
+					<h3>In Progress</h3>
+				</div>
+				<div class="task-column">
+					<h3>Done</h3>
+				</div>
+			</div>
+		</div>
+
+		<div class="task-detail" id="task-detail">
+			<h2>Task Name</h2>
+			<p>Full task description...</p>
+			<p>Attached Files:</p>
+		</div>
+	</div>
+
+	<script th:src="@{/resources/js/script.js}"></script>
 </body>
 </html>
