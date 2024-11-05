@@ -43,6 +43,8 @@ public class GeneralPageController {
 		model.addAttribute("generalPage", generalPage);
 
 		model.addAttribute("taskBoards", taskBoards);
+		
+		model.addAttribute("taskBoard", new TaskBoard());
 
 		return "generalpage/show-generalpage";
 	}

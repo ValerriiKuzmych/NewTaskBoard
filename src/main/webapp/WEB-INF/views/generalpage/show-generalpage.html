@@ -68,12 +68,86 @@ a:hover {
 </body>
 </html> -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>General Page</title>
-<link rel="stylesheet" th:href="@{/resources/css/styles.css}">
+<title>Task Board</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<style>
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	display: flex;
+	font-family: Arial, sans-serif;
+}
+
+.sidebar {
+	width: 200px;
+	background-color: #333;
+	color: white;
+	padding: 20px;
+	position: fixed;
+	height: 100vh;
+}
+
+.sidebar ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.sidebar li {
+	margin-bottom: 15px;
+}
+
+.sidebar a {
+	color: white;
+	text-decoration: none;
+}
+
+.main-content {
+	margin-left: 220px;
+	padding: 20px;
+	width: calc(100% - 220px);
+}
+
+.taskboard-container, .tasks-container {
+	display: flex;
+	gap: 15px;
+	flex-wrap: wrap;
+}
+
+.taskboard-card, .task-card {
+	width: 150px;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	cursor: pointer;
+	background-color: #f9f9f9;
+}
+
+.taskboard-card:hover, .task-card:hover {
+	background-color: #f0f0f0;
+}
+
+.create-taskboard-card {
+	border: 1px dashed #007bff;
+	color: #007bff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.taskboard-detail, .task-detail {
+	display: none;
+	flex-direction: column;
+	gap: 10px;
+}
+</style>
 </head>
 <body>
 
@@ -82,49 +156,79 @@ a:hover {
 		<ul>
 			<li><a href="#">Profile</a></li>
 			<li><a href="#">Preferences</a></li>
-			<li><a href="/logout">Logout</a></li>
+			<li><a href="/users/logout">Logout</a></li>
 		</ul>
 	</div>
 
+
 	<div class="main-content">
-		<h1>TaskBoards</h1>
-		<div class="taskboard-container">
-			<div class="taskboard-card" onclick="showTaskBoardDetail()">
+
+		<div id="taskboards" class="taskboard-container">
+
+			<div class="taskboard-card" onclick="openTaskBoard('1')">
 				<h3>TaskBoard 1</h3>
-				<p>Short description of TaskBoard 1.</p>
+				<p>Description of TaskBoard 1</p>
 			</div>
-			<div class="taskboard-card" onclick="showTaskBoardDetail()">
-				<h3>TaskBoard 2</h3>
-				<p>Short description of TaskBoard 2.</p>
+
+			<div class="taskboard-card create-taskboard-card"
+				onclick="openCreateTaskBoardModal()">
+				<h3>Create New TaskBoard</h3>
 			</div>
 		</div>
 
-		<div class="taskboard-detail" id="taskboard-detail">
+
+		<div id="taskboard-detail" class="taskboard-detail">
+			<button onclick="closeTaskBoard()">Back to TaskBoards</button>
 			<h2>Tasks for TaskBoard 1</h2>
 			<div class="tasks-container">
-				<div class="task-column">
-					<h3>To Do</h3>
-					<div class="task-card" onclick="showTaskDetail()">
-						<p>Task Name</p>
-						<p>Short description...</p>
-					</div>
+
+				<div class="task-card" onclick="openTaskDetail('101')">
+					<h3>Task 1</h3>
+					<p>Short description of Task 1</p>
 				</div>
-				<div class="task-column">
-					<h3>In Progress</h3>
-				</div>
-				<div class="task-column">
-					<h3>Done</h3>
+				<div class="task-card create-taskboard-card"
+					onclick="openCreateTaskModal()">
+					<h3>Add New Task</h3>
 				</div>
 			</div>
 		</div>
 
-		<div class="task-detail" id="task-detail">
-			<h2>Task Name</h2>
-			<p>Full task description...</p>
-			<p>Attached Files:</p>
+
+		<div id="task-detail" class="task-detail">
+			<button onclick="closeTaskDetail()">Back to TaskBoard</button>
+			<h2>Task 1 Details</h2>
+			<p>Full description of Task 1 goes here.</p>
 		</div>
 	</div>
 
-	<script th:src="@{/resources/js/script.js}"></script>
+	<script>
+		function openTaskBoard(taskBoardId) {
+			document.getElementById('taskboards').style.display = 'none';
+			document.getElementById('taskboard-detail').style.display = 'flex';
+		}
+
+		function closeTaskBoard() {
+			document.getElementById('taskboards').style.display = 'flex';
+			document.getElementById('taskboard-detail').style.display = 'none';
+		}
+
+		function openTaskDetail(taskId) {
+			document.getElementById('taskboard-detail').style.display = 'none';
+			document.getElementById('task-detail').style.display = 'flex';
+		}
+
+		function closeTaskDetail() {
+			document.getElementById('taskboard-detail').style.display = 'flex';
+			document.getElementById('task-detail').style.display = 'none';
+		}
+
+		function openCreateTaskBoardModal() {
+			alert('Open modal to create new TaskBoard'); // TO_DO
+		}
+
+		function openCreateTaskModal() {
+			alert('Open modal to create new Task'); // TO_DO
+		}
+	</script>
 </body>
 </html>

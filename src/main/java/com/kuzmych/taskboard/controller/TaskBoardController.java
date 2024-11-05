@@ -52,7 +52,7 @@ public class TaskBoardController {
 		TaskBoard taskBoard = taskBoardService.findById(id);
 
 		taskBoardService.delete(id);
-		
+
 		return "redirect:/generalpage/show/" + taskBoard.getGeneralPage().getId();
 	}
 
