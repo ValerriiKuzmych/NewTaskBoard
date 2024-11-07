@@ -30,7 +30,7 @@ public class GeneralPageController {
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 
 		if (loggedInUser == null) {
-			return "redirect:/login";
+			return "redirect:/users/login";
 		}
 		GeneralPage generalPage = generalPageService.findById(id);
 

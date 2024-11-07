@@ -68,7 +68,7 @@ a:hover {
 </body>
 </html> -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Task Board</title>
@@ -165,11 +165,21 @@ body {
 
 		<div id="taskboards" class="taskboard-container">
 
-			<div class="taskboard-card" onclick="openTaskBoard('1')">
-				<h3>TaskBoard 1</h3>
-				<p>Description of TaskBoard 1</p>
+			<!-- Dynamically generated TaskBoards -->
+			<div th:each="taskBoard : ${taskBoards}" class="taskboard-card"
+				th:onclick="'openTaskBoard(' + ${taskBoard.id} + ')'">
+				<h3 th:text="${taskBoard.name}">TaskBoard Name</h3>
+				<p th:text="${taskBoard.description}">Description of TaskBoard</p>
+
+				<!-- Links for each TaskBoard -->
+				<div class="taskboard-links">
+					<!--<a th:href="@{/taskboards/show/{id}(id=${taskBoard.id})}">Open</a>-->
+					<a th:href="@{/taskboards/edit/{id}(id=${taskBoard.id})}">Edit</a>
+					<a th:href="@{/taskboards/{id}/delete(id=${taskBoard.id})}">Delete</a>
+				</div>
 			</div>
 
+			<!-- Static card for creating a new TaskBoard -->
 			<div class="taskboard-card create-taskboard-card"
 				onclick="openCreateTaskBoardModal()">
 				<h3>Create New TaskBoard</h3>
@@ -179,7 +189,8 @@ body {
 
 		<div id="taskboard-detail" class="taskboard-detail">
 			<button onclick="closeTaskBoard()">Back to TaskBoards</button>
-			<h2>Tasks for TaskBoard 1</h2>
+			<h1 th:text="${taskBoard.name}">Taskboard Name</h1>
+			<p th:text="${taskBoard.description}">Taskboard Description</p>
 			<div class="tasks-container">
 
 				<div class="task-card" onclick="openTaskDetail('101')">
