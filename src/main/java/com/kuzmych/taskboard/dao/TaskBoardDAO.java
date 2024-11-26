@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 
 @Repository
@@ -46,5 +48,17 @@ public class TaskBoardDAO implements ITaskBoardDAO {
 	@Override
 	public void update(TaskBoard taskBoard) {
 		sessionFactory.getCurrentSession().update(taskBoard);
+	}
+
+	@Override
+	public List<Task> getTasksForBoard(Long taskBoardId) {
+
+		Session session = sessionFactory.getCurrentSession();
+
+		String hql = "FROM Task t WHERE t.taskBoard.id = :taskBoardId";
+		Query<Task> query = session.createQuery(hql, Task.class);
+		query.setParameter("taskBoardId", taskBoardId);
+
+		return query.getResultList();
 	}
 }

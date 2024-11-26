@@ -2,7 +2,7 @@ package com.kuzmych.taskboard.dao;
 
 import java.util.List;
 
-
+import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 
 public interface ITaskBoardDAO {
@@ -16,6 +16,8 @@ public interface ITaskBoardDAO {
 	void deleteById(Long id);
 
 	void update(TaskBoard taskBoard);
+
+	List<Task> getTasksForBoard(Long taskBoardId);
 	
 	
 	

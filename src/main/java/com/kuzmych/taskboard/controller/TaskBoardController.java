@@ -3,11 +3,13 @@ package com.kuzmych.taskboard.controller;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -114,8 +116,13 @@ public class TaskBoardController {
 	}
 
 	@PostMapping("/{id}/tasks")
-	public String addTaskToTaskBoard(@PathVariable Long id, @ModelAttribute Task task) {
+	public String addTaskToTaskBoard(@PathVariable Long id, @Valid @ModelAttribute Task task, BindingResult result) {
+		if (result.hasErrors()) {
+
+			return "taskboard/add-task";
+		}
 		taskBoardService.addTaskToTaskBoard(id, task);
 		return "redirect:/taskboards/show/" + id;
 	}
+
 }

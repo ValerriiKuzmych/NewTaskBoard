@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Task</title>
+<link rel="stylesheet" type="text/css" href="/css/styles.css" />
 </head>
 <body>
+<body>
+	<div class="container mt-5">
+		<h1 th:text="${task.name}">Task Name</h1>
+		<p th:text="${task.description}">Task Description</p>
+
+
+		<h2>Task</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Task Name</th>
+					<th>Task Description</th>
+					<th>Priority</th>
+					<th>Status</th>
+					<th>Actions</th>
+					<th>Created Date</th>
+
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${task.name}">Task Name</td>
+					<td th:text="${task.description}">Task Description</td>
+					<td th:text="${task.priority}">Priority</td>
+					<td th:text="${task.taskStatus}">Status</td>
+					<td><a th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a> |
+						<a th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a></td>
+
+					<td
+						th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}"></td>
+
+				</tr>
+			</tbody>
+		</table>
+		<a th:if="${task.taskBoard != null}"
+			th:href="@{|/taskboards/show/${task.taskBoard.id}|}"
+			class="btn btn-secondary"> Go to TaskBoard </a> <a
+			
+			th:if="${task.taskBoard != null and task.taskBoard.generalPage != null}"
+			th:href="@{|/generalpage/show/${task.taskBoard.generalPage.id}|}"
+			class="btn btn-secondary"> Go to General Page </a>
+
+		<!-- Message if General Page is not available -->
+		<p th:if="${taskBoard.generalPage == null}">General Page not
+			available</p>
+	</div>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
 
 </body>
 </html>

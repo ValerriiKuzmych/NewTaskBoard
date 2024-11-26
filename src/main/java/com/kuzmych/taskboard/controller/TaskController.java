@@ -31,7 +31,8 @@ public class TaskController {
 	@GetMapping("/show/{id}")
 	public String showTaskBoard(@PathVariable Long id, Model model) {
 		Task task = taskService.findById(id);
-		model.addAttribute("taskBoard", task);
+		System.out.println("!!!!!!!!!!!!!!!" + task.getTaskBoard().getGeneralPage().getId());
+		model.addAttribute("task", task);
 		return "task/show";
 	}
 

@@ -32,8 +32,9 @@
 					<td th:text="${task.description}">Task Description</td>
 					<td th:text="${task.priority}">Priority</td>
 					<td th:text="${task.taskStatus}">Status</td>
-					<td><a th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a> |
-						<a th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a></td>
+					<td><a th:href="@{/tasks/show/{id}(id=${task.id})}">Open</a> <a
+						th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a> <a
+						th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a></td>
 
 					<td
 						th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}"></td>

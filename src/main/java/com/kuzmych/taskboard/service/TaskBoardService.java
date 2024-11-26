@@ -96,4 +96,10 @@ public class TaskBoardService implements ITaskBoardService {
 			throw new EntityNotFoundException("TaskBoard not found");
 		}
 	}
+
+	@Override
+	public List<Task> getTasksForBoard(Long taskBoardId) {
+		List<Task> tasks = taskBoardDAO.getTasksForBoard(taskBoardId);
+		return tasks;
+	}
 }

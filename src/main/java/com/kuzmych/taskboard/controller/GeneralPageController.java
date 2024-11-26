@@ -2,6 +2,7 @@ package com.kuzmych.taskboard.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kuzmych.taskboard.entity.GeneralPage;
+import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.service.IGeneralPageService;
@@ -43,8 +45,10 @@ public class GeneralPageController {
 		model.addAttribute("generalPage", generalPage);
 
 		model.addAttribute("taskBoards", taskBoards);
-		
+
 		model.addAttribute("taskBoard", new TaskBoard());
+
+		model.addAttribute("task", new Task());
 
 		return "generalpage/show-generalpage";
 	}
@@ -68,7 +72,7 @@ public class GeneralPageController {
 
 	@GetMapping("/{id}/taskboards/new")
 	public String showAddTaskBoardForm(@PathVariable Long id, Model model) {
-
+		System.out.println("GeneralPage ID for TaskBoard form: " + id);
 		model.addAttribute("taskBoard", new TaskBoard());
 
 		model.addAttribute("generalPageId", id);
@@ -77,11 +81,16 @@ public class GeneralPageController {
 	}
 
 	@PostMapping("/{id}/taskboards")
-	public String addTaskBoardToGeneralPage(@PathVariable Long id, @ModelAttribute TaskBoard taskBoard) {
-
+	public String addTaskBoardToGeneralPage(@PathVariable Long id, @ModelAttribute TaskBoard taskBoard, Model model,
+			HttpServletRequest request) {
 		System.out.println("Adding TaskBoard to GeneralPage with id: " + id);
 
 		generalPageService.addTaskBoardToGeneralPage(id, taskBoard);
+
+//		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+//			model.addAttribute("taskBoards", generalPageService.findById(id).getTaskBoards());
+//			return "fragments/taskboard-list :: taskboardList";
+//		}
 
 		return "redirect:/generalpage/show/" + id;
 	}

@@ -19,4 +19,6 @@ public interface ITaskBoardService {
 	
 	public void addTaskToTaskBoard(Long taskBoardId, Task task);
 
+	List<Task> getTasksForBoard(Long taskBoardId);
+
 }
