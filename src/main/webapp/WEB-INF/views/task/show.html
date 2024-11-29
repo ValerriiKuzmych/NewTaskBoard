@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Task</title>
-<link rel="stylesheet" type="text/css"
-	href="/taskboard/src/main/webapp/resources/css/task-show-styles.css" />
 
 <style>
 body {
@@ -21,34 +19,13 @@ body {
 	padding: 20px;
 	background: #ffffff;
 	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); h1 , h2 { color : #333;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+	color: #333;
 	text-align: center;
 	margin-bottom: 20px;
-}
-
-.table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 20px;
-}
-
-.table thead tr {
-	background-color: #007bff;
-	color: #ffffff;
-	text-align: left;
-}
-
-.table th, .table td {
-	padding: 10px;
-	border: 1px solid #ddd;
-}
-
-.table tbody tr:nth-child(even) {
-	background-color: #f9f9f9;
-}
-
-.table tbody tr:hover {
-	background-color: #f1f1f1;
 }
 
 .btn {
@@ -82,70 +59,138 @@ p {
 	color: #666;
 	margin-top: 20px;
 	text-align: center;
+	word-wrap: break-word; /* Перенос длинных слов */
+	overflow-wrap: break-word; /* Совместимость с разными браузерами */
+	max-width: 100%; /* Ограничение ширины описания */
+	white-space: pre-wrap; /* Сохраняет переносы строк из текста */
 }
 
-a {
+.task-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.priority-status {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	font-size: 14px;
+}
+
+.status {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 14px;
+	color: #333;
+}
+
+.status-label {
 	color: #007bff;
-	text-decoration: none;
+	font-weight: bold;
 }
 
-a:hover {
-	text-decoration: underline;
+.priority {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
+
+.priority-label {
+	font-weight: bold;
+	color: #333;
+}
+
+.priority-indicator {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+}
+
+.priority-indicator.low {
+	background-color: #007bff;
+}
+
+.priority-indicator.medium {
+	background-color: #ffa500;
+}
+
+.priority-indicator.high {
+	background-color: #dc3545;
+}
+
+.task-date-container {
+	text-align: right;
+	font-size: 12px;
+	color: #6c757d;
+	font-style: italic;
+	margin-top: 10px;
+}
+
+.task-date-container .label {
+	font-weight: bold;
+	color: #333;
+	margin-right: 5px;
 }
 </style>
 </head>
 
 <body>
-	<div class="container mt-5">
+	<div class="container">
+		<!-- Navigation Buttons -->
+		<div class="navigation">
+			<a th:if="${task.taskBoard != null}"
+				th:href="@{|/taskboards/show/${task.taskBoard.id}|}"
+				class="btn btn-secondary">Go to TaskBoard</a> <a
+				th:if="${task.taskBoard != null and task.taskBoard.generalPage != null}"
+				th:href="@{|/generalpage/show/${task.taskBoard.generalPage.id}|}"
+				class="btn btn-secondary">Go to General Page</a>
+		</div>
 		<h1 th:text="${task.name}">Task Name</h1>
-		<p th:text="${task.description}">Task Description</p>
+		<p th:text="${task.description}"
+			style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; white-space: pre-wrap;">
+			Task Description</p>
+
+		<!-- Priority and Actions Section -->
+		<div class="task-info">
+			<div class="priority-status">
+				<!-- Priority -->
+				<span class="priority"> <span th:text="${task.priority}"
+					class="priority-label">Priority</span> <span
+					class="priority-indicator"
+					th:classappend="${task.priority == 'LOW' ? 'low' : (task.priority == 'MEDIUM' ? 'medium' : 'high')}">
+				</span>
+				</span>
+				<!-- Status -->
+				<span class="status"> <strong>Status:</strong> <span
+					th:text="${task.taskStatus}" class="status-label">Task
+						Status</span>
+				</span>
+			</div>
+
+			<div class="actions">
+				<a th:href="@{/tasks/edit/{id}(id=${task.id})}"
+					class="btn btn-secondary">Edit</a> <a
+					th:href="@{/tasks/{id}/delete(id=${task.id})}"
+					class="btn btn-secondary">Delete</a>
+			</div>
+		</div>
 
 
-		<h2>Task</h2>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>Task Name</th>
-					<th>Task Description</th>
-					<th>Priority</th>
-					<th>Status</th>
-					<th>Actions</th>
-					<th>Created Date</th>
 
-
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td th:text="${task.name}">Task Name</td>
-					<td th:text="${task.description}">Task Description</td>
-					<td th:text="${task.priority}">Priority</td>
-					<td th:text="${task.taskStatus}">Status</td>
-					<td><a th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a> |
-						<a th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a></td>
-
-					<td
-						th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}"></td>
-
-				</tr>
-			</tbody>
-		</table>
-		<a th:if="${task.taskBoard != null}"
-			th:href="@{|/taskboards/show/${task.taskBoard.id}|}"
-			class="btn btn-secondary"> Go to TaskBoard </a> <a
-			th:if="${task.taskBoard != null and task.taskBoard.generalPage != null}"
-			th:href="@{|/generalpage/show/${task.taskBoard.generalPage.id}|}"
-			class="btn btn-secondary"> Go to General Page </a>
-
-
+		<div class="task-date-container">
+			<span class="label">Date Created:</span> <span class="task-date"
+				th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}">
+			</span>
+		</div>
 	</div>
 
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-
 </body>
 </html>
