@@ -1,5 +1,6 @@
 package com.kuzmych.taskboard.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kuzmych.taskboard.entity.GeneralPage;
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.entity.TaskStatus;
 import com.kuzmych.taskboard.service.ITaskBoardService;
 
 @Controller
@@ -31,6 +33,8 @@ public class TaskBoardController {
 	@GetMapping("/show/{id}")
 	public String showTaskBoard(@PathVariable Long id, Model model) {
 		TaskBoard taskBoard = taskBoardService.findById(id);
+		List<TaskStatus> statuses = Arrays.asList(TaskStatus.values());
+		model.addAttribute("statuses", statuses);
 		model.addAttribute("taskBoard", taskBoard);
 		return "taskboard/show";
 	}
@@ -117,6 +121,10 @@ public class TaskBoardController {
 
 	@PostMapping("/{id}/tasks")
 	public String addTaskToTaskBoard(@PathVariable Long id, @Valid @ModelAttribute Task task, BindingResult result) {
+		
+		if (task.getTaskStatus() == null) {
+			task.setTaskStatus(TaskStatus.NEW);
+		}
 		if (result.hasErrors()) {
 
 			return "taskboard/add-task";

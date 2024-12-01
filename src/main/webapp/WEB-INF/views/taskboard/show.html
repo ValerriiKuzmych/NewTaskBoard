@@ -5,43 +5,140 @@
 <title>Taskboard Details</title>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f8f9fa;
+	margin: 0;
+	padding: 0;
+}
+
+.task-board {
+	display: flex;
+	gap: 20px;
+	margin: 20px;
+	justify-content: space-between;
+}
+
+.status-column {
+	flex: 1;
+	background-color: #ffffff;
+	border-radius: 8px;
+	padding: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.status-column h2 {
+	text-align: center;
+	margin-bottom: 15px;
+	font-size: 18px;
+	color: #333;
+}
+
+.task-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	justify-content: center;
+}
+
+.task-card {
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	padding: 15px;
+	width: 280px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.task-header h3 {
+	font-size: 16px;
+	color: #333;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.task-info {
+	font-size: 14px;
+	color: #555;
+	margin-bottom: 10px;
+}
+
+.task-info p {
+	margin: 5px 0;
+}
+
+.task-actions {
+	display: flex;
+	justify-content: space-between;
+	margin-top: auto;
+}
+
+.task-actions .btn {
+	font-size: 12px;
+	padding: 8px 12px;
+	border-radius: 4px;
+	text-decoration: none;
+	text-align: center;
+}
+
+.task-actions .btn-primary {
+	background-color: #007bff;
+	color: #fff;
+}
+
+.task-actions .btn-secondary {
+	background-color: #6c757d;
+	color: #fff;
+}
+
+.task-actions .btn-danger {
+	background-color: #dc3545;
+	color: #fff;
+}
+
+.task-actions .btn:hover {
+	opacity: 0.9;
+}
+
+.task-date {
+	text-align: right;
+	font-size: 12px;
+	color: #6c757d;
+	margin-top: 10px;
+	font-style: italic;
+}
+
+.priority-indicator {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	margin-left: 5px;
+}
+
+.priority-indicator.low {
+	background-color: #007bff; /* Blue */
+}
+
+.priority-indicator.medium {
+	background-color: #ffa500; /* Orange */
+}
+
+.priority-indicator.high {
+	background-color: #dc3545; /* Red */
+}
+</style>
 </head>
 <body>
 	<div class="container mt-5">
+
+
 		<h1 th:text="${taskBoard.name}">Taskboard Name</h1>
 		<p th:text="${taskBoard.description}">Taskboard Description</p>
-
-		<!-- Tasks Section -->
-		<h2>Tasks</h2>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>Task Name</th>
-					<th>Task Description</th>
-					<th>Priority</th>
-					<th>Status</th>
-					<th>Actions</th>
-					<th>Created Date</th>
-
-
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="task : ${taskBoard.tasks}">
-					<td th:text="${task.name}">Task Name</td>
-					<td th:text="${task.description}">Task Description</td>
-					<td th:text="${task.priority}">Priority</td>
-					<td th:text="${task.taskStatus}">Status</td>
-					<td><a th:href="@{/tasks/show/{id}(id=${task.id})}">Open</a> <a
-						th:href="@{/tasks/edit/{id}(id=${task.id})}">Edit</a> <a
-						th:href="@{/tasks/{id}/delete(id=${task.id})}">Delete</a></td>
-
-					<td
-						th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}"></td>
-
-				</tr>
-			</tbody>
-		</table>
 
 		<!-- Buttons for adding tasks and navigating -->
 		<a th:href="@{|/taskboards/${taskBoard.id}/tasks/new|}"
@@ -49,10 +146,50 @@
 			th:if="${taskBoard.generalPage != null}"
 			th:href="@{|/generalpage/show/${taskBoard.generalPage.id}|}"
 			class="btn btn-secondary">Go to General Page</a>
+		<div class="task-board">
+			<!-- Loop through each status -->
+			<div class="status-column" th:each="status : ${statuses}">
+				<h2 th:text="${status}">Status</h2>
+				<div class="task-list">
 
-		<!-- Message if General Page is not available -->
-		<p th:if="${taskBoard.generalPage == null}">General Page not
-			available</p>
+					<div class="task-card" th:each="task : ${taskBoard.tasks}"
+						th:if="${task.taskStatus.name() == status.name()}">
+						<!-- Task Name -->
+						<div class="task-header">
+							<h3 th:text="${task.name}">Task Name</h3>
+						</div>
+						<!-- Priority and Status -->
+						<div class="priority-status">
+							<span class="priority">Priority: <span
+								th:text="${task.priority}" class="priority-label">Priority</span>
+								<span class="priority-indicator"
+								th:classappend="${task.priority == 'LOW' ? 'low' : (task.priority == 'MEDIUM' ? 'medium' : 'high')}">
+							</span> <br />
+							</span>Status: <span th:text="${task.taskStatus}" class="status-label">Status</span>
+						</div>
+						<!-- Actions and Date -->
+						<div class="task-actions">
+							<a th:href="@{/tasks/show/{id}(id=${task.id})}"
+								class="btn btn-primary">Open</a> <a
+								th:href="@{/tasks/edit/{id}(id=${task.id})}"
+								class="btn btn-secondary">Edit</a> <a
+								th:href="@{/tasks/{id}/delete(id=${task.id})}"
+								class="btn btn-danger">Delete</a>
+						</div>
+						<div class="task-date">
+							<span
+								th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}">
+								Created Date </span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
 	</div>
 
 	<script
