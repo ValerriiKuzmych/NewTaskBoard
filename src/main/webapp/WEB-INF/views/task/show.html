@@ -59,10 +59,10 @@ p {
 	color: #666;
 	margin-top: 20px;
 	text-align: center;
-	word-wrap: break-word; /* Перенос длинных слов */
-	overflow-wrap: break-word; /* Совместимость с разными браузерами */
-	max-width: 100%; /* Ограничение ширины описания */
-	white-space: pre-wrap; /* Сохраняет переносы строк из текста */
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	max-width: 100%;
+	white-space: pre-wrap;
 }
 
 .task-info {
@@ -154,6 +154,14 @@ p {
 			style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; white-space: pre-wrap;">
 			Task Description</p>
 
+
+		<!-- File Section -->
+		<div class="file-section" th:if="${task.filePath != null}">
+			<h3>Attached File</h3>
+			<a th:href="@{/files/{filePath}(filePath=${task.filePath})}"
+				class="btn btn-secondary" target="_blank">Download/View File</a>
+		</div>
+
 		<!-- Priority and Actions Section -->
 		<div class="task-info">
 			<div class="priority-status">
@@ -163,11 +171,14 @@ p {
 					class="priority-indicator"
 					th:classappend="${task.priority == 'LOW' ? 'low' : (task.priority == 'MEDIUM' ? 'medium' : 'high')}">
 				</span>
+
 				</span>
+
 				<!-- Status -->
 				<span class="status"> <strong>Status:</strong> <span
 					th:text="${task.taskStatus}" class="status-label">Task
 						Status</span>
+
 				</span>
 			</div>
 
