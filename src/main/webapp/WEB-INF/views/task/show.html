@@ -155,12 +155,7 @@ p {
 			Task Description</p>
 
 
-		<!-- File Section -->
-		<div class="file-section" th:if="${task.filePath != null}">
-			<h3>Attached File</h3>
-			<a th:href="@{/files/{filePath}(filePath=${task.filePath})}"
-				class="btn btn-secondary" target="_blank">Download/View File</a>
-		</div>
+
 
 		<!-- Priority and Actions Section -->
 		<div class="task-info">
@@ -173,6 +168,16 @@ p {
 				</span>
 
 				</span>
+				<!-- File Section -->
+				<div class="file-section" th:if="${task.filePath != null}">
+
+					<!-- Existing button for viewing the file -->
+					<a th:href="@{/tasks/files/{fileName}(fileName=${task.filePath})}"
+						target="_blank" class="btn btn-secondary">View File</a>
+					<!-- New button for downloading the file -->
+					<a th:href="@{/tasks/download/{id}(id=${task.id})}"
+						class="btn btn-secondary"> Download File </a>
+				</div>
 
 				<!-- Status -->
 				<span class="status"> <strong>Status:</strong> <span

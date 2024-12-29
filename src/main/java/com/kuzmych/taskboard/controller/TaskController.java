@@ -1,10 +1,13 @@
 package com.kuzmych.taskboard.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.service.ITaskService;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 
 @Controller
 @RequestMapping("/tasks")
@@ -93,13 +98,26 @@ public class TaskController {
 		System.out.println("Updating Task ID: " + task.getId());
 		System.out.println("Uploading File: " + file);
 
+
 		if (file != null && !file.isEmpty()) {
 			try {
-				String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-				Path filePath = Paths.get("C:\\TaskBoard\\uploads_files_for_tasks\\" + fileName);
-				System.out.println("filepath: " + filePath);
+
+				String originalFileName = file.getOriginalFilename();
+				String sanitizedFileName = originalFileName != null
+						? originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")
+						: "default_file";
+				String fileName = System.currentTimeMillis() + "_" + sanitizedFileName;
+
+				Path uploadDir = Paths.get("C:\\TaskBoard\\uploads_files_for_tasks\\");
+				if (!Files.exists(uploadDir)) {
+					Files.createDirectories(uploadDir);
+				}
+				Path filePath = uploadDir.resolve(fileName);
+
 				Files.write(filePath, file.getBytes());
-				task.setFilePath(filePath.toString());
+
+				task.setFilePath(fileName);
+
 			} catch (IOException e) {
 				model.addAttribute("error", "File upload failed: " + e.getMessage());
 				return "task/edit";
@@ -110,4 +128,67 @@ public class TaskController {
 		return "redirect:/taskboards/show/" + taskService.findById(id).getTaskBoard().getId();
 	}
 
+	@GetMapping("/download/{id}")
+	public void downloadFile(@PathVariable("id") Long taskId, HttpServletResponse response) {
+		Task task = taskService.findById(taskId);
+		if (task == null || task.getFilePath() == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		File file = new File(task.getFilePath());
+		if (!file.exists()) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+
+		try (InputStream inputStream = new FileInputStream(file);
+				OutputStream outputStream = response.getOutputStream()) {
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, bytesRead);
+			}
+		} catch (IOException e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/files/{fileName:.+}")
+	public void serveFile(@PathVariable String fileName, HttpServletResponse response) {
+		String uploadDir = "C:\\TaskBoard\\uploads_files_for_tasks\\";
+		File file = new File(uploadDir + fileName);
+		System.out.println("Requested file: " + file.getAbsolutePath()); 
+
+		if (file.exists()) {
+			try {
+				String mimeType = Files.probeContentType(file.toPath());
+				if (mimeType == null) {
+					mimeType = "application/octet-stream";
+				}
+
+				response.setContentType(mimeType);
+				response.setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
+
+				try (InputStream inputStream = new FileInputStream(file);
+						OutputStream outputStream = response.getOutputStream()) {
+					byte[] buffer = new byte[1024];
+					int bytesRead;
+					while ((bytesRead = inputStream.read(buffer)) != -1) {
+						outputStream.write(buffer, 0, bytesRead);
+					}
+				}
+			} catch (IOException e) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				e.printStackTrace();
+			}
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			System.out.println("File not found: " + file.getAbsolutePath());
+		}
+	}
 }
