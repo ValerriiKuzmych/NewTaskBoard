@@ -98,7 +98,6 @@ public class TaskController {
 		System.out.println("Updating Task ID: " + task.getId());
 		System.out.println("Uploading File: " + file);
 
-
 		if (file != null && !file.isEmpty()) {
 			try {
 
@@ -130,13 +129,14 @@ public class TaskController {
 
 	@GetMapping("/download/{id}")
 	public void downloadFile(@PathVariable("id") Long taskId, HttpServletResponse response) {
+		String uploadDir = "C:\\TaskBoard\\uploads_files_for_tasks\\";
 		Task task = taskService.findById(taskId);
 		if (task == null || task.getFilePath() == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
-		File file = new File(task.getFilePath());
+		File file = new File(uploadDir + task.getFilePath());
 		if (!file.exists()) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -155,6 +155,7 @@ public class TaskController {
 			}
 		} catch (IOException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
 		}
 	}
 
@@ -162,7 +163,7 @@ public class TaskController {
 	public void serveFile(@PathVariable String fileName, HttpServletResponse response) {
 		String uploadDir = "C:\\TaskBoard\\uploads_files_for_tasks\\";
 		File file = new File(uploadDir + fileName);
-		System.out.println("Requested file: " + file.getAbsolutePath()); 
+		System.out.println("Requested file: " + file.getAbsolutePath());
 
 		if (file.exists()) {
 			try {
