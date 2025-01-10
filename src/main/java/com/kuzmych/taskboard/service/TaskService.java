@@ -85,6 +85,7 @@ public class TaskService implements ITaskService {
 			existingTask.setFilePath(task.getFilePath());
 			existingTask.setPriority(task.getPriority());
 			existingTask.setTaskStatus(task.getTaskStatus());
+			existingTask.setExecutorName(task.getExecutorName());
 			taskDAO.update(existingTask);
 		} else {
 			throw new EntityNotFoundException("Task not found with ID: " + task.getId());

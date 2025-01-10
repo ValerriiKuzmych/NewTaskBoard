@@ -25,6 +25,9 @@ public class Task {
 	private String description;
 	private String filePath;
 
+	@Column(name = "executor_name")
+	private String executorName;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "priority", nullable = false)
 	private TaskPriority priority;
@@ -39,6 +42,7 @@ public class Task {
 	@ManyToOne
 	@JoinColumn(name = "task_board_id")
 	private TaskBoard taskBoard;
+
 	@Version
 	private Long version;
 
@@ -76,6 +80,16 @@ public class Task {
 
 	public void setCreatedDate(LocalDateTime createdDate) {
 		this.createdDate = createdDate;
+	}
+
+
+
+	public String getExecutorName() {
+		return executorName;
+	}
+
+	public void setExecutorName(String executorName) {
+		this.executorName = executorName;
 	}
 
 	public String getDescription() {

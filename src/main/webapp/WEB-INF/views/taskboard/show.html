@@ -121,15 +121,15 @@ body {
 }
 
 .priority-indicator.low {
-    background-color: #007bff; /* Blue */
+	background-color: #007bff; /* Blue */
 }
 
 .priority-indicator.medium {
-    background-color: #ffa500; /* Orange */
+	background-color: #ffa500; /* Orange */
 }
 
 .priority-indicator.high {
-    background-color: #dc3545; /* Red */
+	background-color: #dc3545; /* Red */
 }
 </style>
 </head>
@@ -166,6 +166,11 @@ body {
 								th:classappend="${task.priority == 'LOW' ? 'low' : (task.priority == 'MEDIUM' ? 'medium' : 'high')}">
 							</span> <br />
 							</span>Status: <span th:text="${task.taskStatus}" class="status-label">Status</span>
+						</div>
+						<!-- Executor Name -->
+						<div style="text-align: left; margin-top: 20px;">
+							<strong>Executor:</strong> <span th:text="${task.executorName}">Executor
+								Name</span>
 						</div>
 						<!-- Actions and Date -->
 						<div class="task-actions">
