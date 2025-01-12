@@ -172,10 +172,9 @@ p {
 				<span class="priority"> <span th:text="${task.priority}"
 					class="priority-label">Priority</span> <span
 					class="priority-indicator"
-					th:classappend="${task.priority == 'LOW' ? 'low' : (task.priority == 'MEDIUM' ? 'medium' : 'high')}">
+					th:classappend="|${task.priority}|"> </span>
 				</span>
 
-				</span>
 				<!-- File Section -->
 				<div class="file-section" th:if="${task.filePath != null}">
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kuzmych.taskboard.entity.GeneralPage;
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.entity.TaskPriority;
 import com.kuzmych.taskboard.entity.TaskStatus;
 import com.kuzmych.taskboard.service.ITaskBoardService;
 
@@ -121,9 +122,12 @@ public class TaskBoardController {
 
 	@PostMapping("/{id}/tasks")
 	public String addTaskToTaskBoard(@PathVariable Long id, @Valid @ModelAttribute Task task, BindingResult result) {
-		
+
 		if (task.getTaskStatus() == null) {
 			task.setTaskStatus(TaskStatus.NEW);
+		}
+		if (task.getPriority() == null) {
+			task.setPriority(TaskPriority.LOW);
 		}
 		if (result.hasErrors()) {
 

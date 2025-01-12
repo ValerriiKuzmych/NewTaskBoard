@@ -5,6 +5,7 @@
 <title>Taskboard Details</title>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles.css?v=1.0">
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -121,15 +122,19 @@ body {
 }
 
 .priority-indicator.low {
-	background-color: #007bff; /* Blue */
+	background-color: blue;
 }
 
 .priority-indicator.medium {
-	background-color: #ffa500; /* Orange */
+	background-color: orange;
 }
 
 .priority-indicator.high {
-	background-color: #dc3545; /* Red */
+	background-color: red;
+}
+
+.priority-indicator.unknown-priority {
+	background-color: gray;
 }
 </style>
 </head>
@@ -163,10 +168,11 @@ body {
 							<span class="priority">Priority: <span
 								th:text="${task.priority}" class="priority-label">Priority</span>
 								<span class="priority-indicator"
-								th:classappend="${task.priority == 'LOW' ? 'low' : (task.priority == 'MEDIUM' ? 'medium' : 'high')}">
-							</span> <br />
-							</span>Status: <span th:text="${task.taskStatus}" class="status-label">Status</span>
+								th:classappend="|${task.priority}|"> </span>
+							</span> <br /> Status: <span th:text="${task.taskStatus}"
+								class="status-label">Status</span>
 						</div>
+
 						<!-- Executor Name -->
 						<div style="text-align: left; margin-top: 20px;">
 							<strong>Executor:</strong> <span th:text="${task.executorName}">Executor
