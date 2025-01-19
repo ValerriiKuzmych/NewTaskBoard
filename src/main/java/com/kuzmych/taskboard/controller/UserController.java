@@ -74,32 +74,29 @@ public class UserController {
 
 	@PostMapping("/login")
 	public String userLogin(@RequestParam String userName, @RequestParam String password, HttpSession session) {
-		
+
 		boolean isAuthenticated = userService.authenticateUser(userName, password);
 
 		if (isAuthenticated) {
 			User user = userService.findByUserName(userName);
 			session.setAttribute("loggedInUser", user);
-			
+
 			return "redirect:/generalpage/show/" + user.getGeneralPage().getId();
 		} else {
 			return "redirect:/test";
 		}
 	}
 
-	
 	@PostMapping("/logout")
 	public String logout(HttpSession session) {
-	    session.invalidate();
-	    return "redirect:/users/login";
+		session.invalidate();
+		return "redirect:/users/login";
 	}
-	
-	
+
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 
 		userService.delete(id);
 	}
-	
-	
+
 }

@@ -115,9 +115,11 @@ public class UserService implements IUserService {
 	
 	
 
-	public boolean checkUserAccess(User user) {
+	public boolean checkUserAccess(User loggedInUser) {
+		loggedInUser.getLogin();
+		
 
-		return false;
+		return true;
 	};
 
 }

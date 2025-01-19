@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.entity.TaskPriority;
 import com.kuzmych.taskboard.entity.TaskStatus;
+import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.service.ITaskBoardService;
 
 @Controller
@@ -32,19 +34,23 @@ public class TaskBoardController {
 	private ITaskBoardService taskBoardService;
 
 	@GetMapping("/show/{id}")
-	public String showTaskBoard(@PathVariable Long id, Model model) {
+	public String showTaskBoard(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
 		TaskBoard taskBoard = taskBoardService.findById(id);
+
+		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
+
 		List<TaskStatus> statuses = Arrays.asList(TaskStatus.values());
 		model.addAttribute("statuses", statuses);
 		model.addAttribute("taskBoard", taskBoard);
 		return "taskboard/show";
-	}
-
-	@GetMapping
-	public String listTaskBoards(Model model) {
-		List<TaskBoard> taskBoards = taskBoardService.findAll();
-		model.addAttribute("taskBoards", taskBoards);
-		return "taskboard/taskboards";
 	}
 
 	@PostMapping
@@ -54,9 +60,18 @@ public class TaskBoardController {
 	}
 
 	@GetMapping("/{id}/delete")
-	public String delete(@PathVariable Long id) {
+	public String delete(@PathVariable Long id, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
 
 		TaskBoard taskBoard = taskBoardService.findById(id);
+
+		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
 
 		taskBoardService.delete(id);
 
@@ -64,12 +79,17 @@ public class TaskBoardController {
 	}
 
 	@GetMapping("/edit/{id}")
-	public String editTaskBoardForm(@PathVariable Long id, Model model) {
+	public String editTaskBoardForm(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
 
 		TaskBoard taskBoard = taskBoardService.findById(id);
 
-		if (taskBoard == null) {
-			return "error/404";
+		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
 		}
 
 		GeneralPage generalPage = taskBoard.getGeneralPage();
@@ -85,7 +105,19 @@ public class TaskBoardController {
 	}
 
 	@PostMapping("/update")
-	public String updateTaskBoard(@ModelAttribute TaskBoard taskBoard, Model model) {
+	public String updateTaskBoard(@ModelAttribute TaskBoard taskBoard, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
+		TaskBoard taskBoardchek = taskBoard;
+
+		if (taskBoard == null || !taskBoardchek.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
+
 		GeneralPage generalPage = taskBoard.getGeneralPage();
 
 		if (generalPage == null) {
@@ -114,7 +146,18 @@ public class TaskBoardController {
 	}
 
 	@GetMapping("/{id}/tasks/new")
-	public String showAddTaskForm(@PathVariable Long id, Model model) {
+	public String showAddTaskForm(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
+		TaskBoard taskBoard = taskBoardService.findById(id);
+
+		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
 		model.addAttribute("task", new Task());
 		model.addAttribute("taskBoardId", id);
 		return "taskboard/add-task";

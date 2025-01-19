@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.service.ITaskService;
 import java.io.InputStream;
 import java.io.FileInputStream;
@@ -34,8 +36,19 @@ public class TaskController {
 	private ITaskService taskService;
 
 	@GetMapping("/show/{id}")
-	public String showTaskBoard(@PathVariable Long id, Model model) {
+	public String showTaskBoard(@PathVariable Long id, Model model, HttpSession session) {
+		
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
 		Task task = taskService.findById(id);
+
+		if (task == null || !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
+		
 		model.addAttribute("task", task);
 		return "task/show";
 	}
@@ -60,24 +73,39 @@ public class TaskController {
 	}
 
 	@GetMapping("/{id}/delete")
-	public String delete(@PathVariable Long id) {
+	public String delete(@PathVariable Long id, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
 
 		Task task = taskService.findById(id);
+
+		if (task == null || !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
 		taskService.delete(id);
 
 		return "redirect:/taskboards/show/" + task.getTaskBoard().getId();
 	}
 
 	@GetMapping("/edit/{id}")
-	public String editTaskForm(@PathVariable Long id, Model model) {
+	public String editTaskForm(@PathVariable Long id, Model model, HttpSession session) {
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
 		Task task = taskService.findById(id);
+
+		if (task == null || !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
 
 		System.out.println("Editing Task ID: " + id + " - Task: " + task);
 
-		if (task == null) {
-			return "error/404";
-		}
-
+		
 		TaskBoard taskBoard = task.getTaskBoard();
 
 		if (taskBoard == null) {
@@ -131,7 +159,7 @@ public class TaskController {
 	public void downloadFile(@PathVariable("id") Long taskId, HttpServletResponse response) {
 		String uploadDir = "C:\\TaskBoard\\uploads_files_for_tasks\\";
 		Task task = taskService.findById(taskId);
-		if (task == null || task.getFilePath() == null) {
+		if (task.getFilePath() == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}

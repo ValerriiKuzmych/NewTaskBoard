@@ -20,17 +20,6 @@ public class TaskService implements ITaskService {
 	@Autowired
 	private ITaskDAO taskDAO;
 
-	/*
-	 * @Transactional
-	 * 
-	 * @Override public void updateTaskStatus(Long taskId, TaskStatus newStatus) {
-	 * Task task = taskDAO.findById(taskId); if (task != null) {
-	 * task.setTaskStatus(newStatus); taskDAO.update(task); } else { throw new
-	 * EntityNotFoundException("Task not found with ID: " + task.getId()); }
-	 * 
-	 * }
-	 */
-
 	@Transactional(readOnly = true)
 	@Override
 	public Task findById(Long id) {

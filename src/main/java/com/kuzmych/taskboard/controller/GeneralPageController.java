@@ -37,7 +37,7 @@ public class GeneralPageController {
 		GeneralPage generalPage = generalPageService.findById(id);
 
 		if (generalPage == null || !generalPage.getUser().getLogin().equals(loggedInUser.getLogin())) {
-			return "error/403"; // display a 403 error page for unauthorized access
+			return "error/403";
 		}
 
 		List<TaskBoard> taskBoards = generalPage.getTaskBoards();
@@ -53,26 +53,20 @@ public class GeneralPageController {
 		return "generalpage/show-generalpage";
 	}
 
-//	@GetMapping("/new")
-//
-//	public String showCreateGeneralPageForm(Model model) {
-//
-//		model.addAttribute("generalPage", new GeneralPage());
-//
-//		return "generalpage/new-generalpage";
-//	}
-//
-//	@PostMapping
-//	public String createGeneralPage(@ModelAttribute GeneralPage generalPage) {
-//
-//		generalPageService.save(generalPage);
-//
-//		return "redirect:/generalpage";
-//	}
-
 	@GetMapping("/{id}/taskboards/new")
-	public String showAddTaskBoardForm(@PathVariable Long id, Model model) {
-		System.out.println("GeneralPage ID for TaskBoard form: " + id);
+	public String showAddTaskBoardForm(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+		GeneralPage generalPage = generalPageService.findById(id);
+
+		if (generalPage == null || !generalPage.getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
+
 		model.addAttribute("taskBoard", new TaskBoard());
 
 		model.addAttribute("generalPageId", id);
@@ -86,11 +80,6 @@ public class GeneralPageController {
 		System.out.println("Adding TaskBoard to GeneralPage with id: " + id);
 
 		generalPageService.addTaskBoardToGeneralPage(id, taskBoard);
-
-//		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-//			model.addAttribute("taskBoards", generalPageService.findById(id).getTaskBoards());
-//			return "fragments/taskboard-list :: taskboardList";
-//		}
 
 		return "redirect:/generalpage/show/" + id;
 	}
