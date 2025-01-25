@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>User Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>User Login</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>User Login</h2>
-        
-        <form action="#" th:action="@{/users/login}" method="post">
-            <div class="form-group">
-                <label for="userName">Username:</label>
-                <input type="text" id="userName" name="userName" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
+	<div class="container mt-5">
+		<h2>User Login</h2>
 
-        <!-- Optional: Display error message if login failed -->
-        <div th:if="${param.error}" class="alert alert-danger mt-3">
-            Invalid username or password.
-        </div>
-    </div>
+		<form action="#" th:action="@{/users/login}" method="post">
+			<div class="form-group">
+				<label for="userName">Username:</label> <input type="text"
+					id="userName" name="userName" class="form-control" required>
+			</div>
+			<div class="form-group">
+				<label for="password">Password:</label> <input type="password"
+					id="password" name="password" class="form-control" required>
+			</div>
+			<div class="d-flex">
+				<button type="submit" class="btn btn-primary">Log In</button>
+				<a href="http://localhost:8080/taskboardmanager/users/register"
+					class="btn btn-secondary ml-2">Sign Up</a>
+			</div>
+		</form>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+		<div th:if="${param.error}" class="alert alert-danger mt-3">
+			Invalid username or password.</div>
+	</div>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
