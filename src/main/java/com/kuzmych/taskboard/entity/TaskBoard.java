@@ -1,7 +1,6 @@
 package com.kuzmych.taskboard.entity;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +25,9 @@ public class TaskBoard {
 
 	@OneToMany(mappedBy = "taskBoard", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Task> tasks;
+
+	@OneToMany(mappedBy = "taskBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<UserTaskBoardAccess> usersWithAccess;
 
 	@ManyToOne
 	@JoinColumn(name = "general_page_id")
@@ -84,6 +86,14 @@ public class TaskBoard {
 
 	public void setGeneralPage(GeneralPage generalPage) {
 		this.generalPage = generalPage;
+	}
+
+	public List<UserTaskBoardAccess> getUsersWithAccess() {
+		return usersWithAccess;
+	}
+
+	public void setUsersWithAccess(List<UserTaskBoardAccess> usersWithAccess) {
+		this.usersWithAccess = usersWithAccess;
 	}
 
 }

@@ -15,7 +15,6 @@ import com.kuzmych.taskboard.dao.ITaskDAO;
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 
-@Transactional
 @Service
 public class TaskBoardService implements ITaskBoardService {
 
@@ -31,6 +30,7 @@ public class TaskBoardService implements ITaskBoardService {
 		if (taskBoard != null) {
 
 			taskBoard.getTasks().size();
+			taskBoard.getUsersWithAccess().size();
 		}
 		return taskBoard;
 	}
@@ -83,7 +83,7 @@ public class TaskBoardService implements ITaskBoardService {
 		if (existingTaskBoard != null) {
 			existingTaskBoard.setName(taskBoard.getName());
 			existingTaskBoard.setDescription(taskBoard.getDescription());
-
+			existingTaskBoard.setUsersWithAccess(taskBoard.getUsersWithAccess());
 			if (taskBoard.getVersion() == null) {
 				taskBoard.setVersion(0L); // Default version
 			}

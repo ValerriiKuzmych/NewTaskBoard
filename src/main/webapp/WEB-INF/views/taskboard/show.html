@@ -136,6 +136,18 @@ body {
 .priority-indicator.unknown-priority {
 	background-color: gray;
 }
+
+.button-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.right-buttons {
+	display: flex;
+	gap: 10px;
+}
 </style>
 </head>
 <body>
@@ -144,13 +156,23 @@ body {
 
 		<h1 th:text="${taskBoard.name}">Taskboard Name</h1>
 		<p th:text="${taskBoard.description}">Taskboard Description</p>
+		<div class="users-with-acces"
+			th:each="access : ${taskBoard.usersWithAccess}">
+			<span th:text="${access.user.name}">User Name</span>
+		</div>
+		<div class="button-container">
+			<a th:href="@{|/taskboards/${taskBoard.id}/tasks/new|}"
+				class="btn btn-primary">Add New Task</a>
 
-		<!-- Buttons for adding tasks and navigating -->
-		<a th:href="@{|/taskboards/${taskBoard.id}/tasks/new|}"
-			class="btn btn-primary">Add New Task</a> <a
-			th:if="${taskBoard.generalPage != null}"
-			th:href="@{|/generalpage/show/${taskBoard.generalPage.id}|}"
-			class="btn btn-secondary">Go to General Page</a>
+
+			<div class="right-buttons">
+				<a th:if="${taskBoard.generalPage != null}"
+					th:href="@{|/generalpage/show/${taskBoard.generalPage.id}|}"
+					class="btn btn-secondary">Go to General Page</a> <a
+					th:href="@{/users-access/{id}/access-option(id=${taskBoard.id})}"
+					class="btn btn-secondary">Delegation Settings</a>
+			</div>
+		</div>
 		<div class="task-board">
 			<!-- Loop through each status -->
 			<div class="status-column" th:each="status : ${statuses}">

@@ -26,13 +26,38 @@ public class UserService implements IUserService {
 	@Override
 	public User findById(Long id) {
 
-		return userDAO.findById(id);
+		User user = userDAO.findById(id);
+
+		if (user != null) {
+
+			user.getTaskBoardAccesses().size();
+
+		}
+
+		return user;
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public User findByUserName(String userName) {
 		return userDAO.findByUserName(userName);
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public User findByNameOrId(String userIdentifier) {
+
+		try {
+
+			Long userId = Long.parseLong(userIdentifier);
+
+			return userDAO.findById(userId);
+
+		} catch (NumberFormatException e) {
+
+			return userDAO.findByUserName(userIdentifier);
+		}
+
 	}
 
 	@Transactional
@@ -59,7 +84,7 @@ public class UserService implements IUserService {
 			existingUser.setName(user.getName());
 			existingUser.setEmail(user.getEmail());
 			existingUser.setLogin(user.getLogin());
-
+			existingUser.setTaskBoardAccesses(user.getTaskBoardAccesses());
 			if (user.getVersion() == null) {
 				user.setVersion(0L); // Default version
 			}
@@ -112,12 +137,9 @@ public class UserService implements IUserService {
 		return user;
 
 	}
-	
-	
 
 	public boolean checkUserAccess(User loggedInUser) {
 		loggedInUser.getLogin();
-		
 
 		return true;
 	};

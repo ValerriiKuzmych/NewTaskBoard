@@ -19,6 +19,7 @@ import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.service.IGeneralPageService;
+import com.kuzmych.taskboard.service.IUserService;
 
 @Controller
 @RequestMapping("/generalpage")
@@ -26,6 +27,8 @@ public class GeneralPageController {
 
 	@Autowired
 	private IGeneralPageService generalPageService;
+	@Autowired
+	private IUserService userService;
 
 	@GetMapping("/show/{id}")
 	public String showGeneralPage(@PathVariable Long id, Model model, HttpSession session) {
@@ -40,8 +43,12 @@ public class GeneralPageController {
 			return "error/403";
 		}
 
+		User userAccess = userService.findById(generalPage.getUser().getId());
+
 		List<TaskBoard> taskBoards = generalPage.getTaskBoards();
 
+		model.addAttribute("userAccess", userAccess);
+		
 		model.addAttribute("generalPage", generalPage);
 
 		model.addAttribute("taskBoards", taskBoards);

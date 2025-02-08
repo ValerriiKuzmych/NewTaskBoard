@@ -143,6 +143,24 @@ body {
 						class="btn-delete">Delete</a>
 				</div>
 			</div>
+
+			<div class="card"
+				th:each="otherTaskBoard : ${userAccess.taskBoardAccesses}">
+				<h3 th:text="${otherTaskBoard.taskBoard.name}">TaskBoard Name</h3>
+				<p>
+					Other TaskBoard ID: <span th:text="${otherTaskBoard.taskBoard.id}">1</span>
+				</p>
+				<p th:text="${otherTaskBoard.taskBoard.description}">Description</p>
+				<div class="card-actions">
+					<a
+						th:href="@{/taskboards/show/{id}(id=${otherTaskBoard.taskBoard.id})}">Open</a>
+					<a
+						th:href="@{/taskboards/edit/{id}(id=${otherTaskBoard.taskBoard.id})}">Edit</a>
+					<a
+						th:href="@{/taskboards/{id}/delete(id=${otherTaskBoard.taskBoard.id})}"
+						class="btn-delete">Delete</a>
+				</div>
+			</div>
 		</div>
 
 		<!-- Create New TaskBoard -->

@@ -37,7 +37,7 @@ public class TaskController {
 
 	@GetMapping("/show/{id}")
 	public String showTaskBoard(@PathVariable Long id, Model model, HttpSession session) {
-		
+
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		if (loggedInUser == null) {
 			return "redirect:/users/login";
@@ -45,10 +45,11 @@ public class TaskController {
 
 		Task task = taskService.findById(id);
 
-		if (task == null || !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+		if (task == null
+				|| !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
 			return "error/403";
 		}
-		
+
 		model.addAttribute("task", task);
 		return "task/show";
 	}
@@ -82,7 +83,8 @@ public class TaskController {
 
 		Task task = taskService.findById(id);
 
-		if (task == null || !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+		if (task == null
+				|| !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
 			return "error/403";
 		}
 		taskService.delete(id);
@@ -99,13 +101,13 @@ public class TaskController {
 
 		Task task = taskService.findById(id);
 
-		if (task == null || !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+		if (task == null
+				|| !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
 			return "error/403";
 		}
 
 		System.out.println("Editing Task ID: " + id + " - Task: " + task);
 
-		
 		TaskBoard taskBoard = task.getTaskBoard();
 
 		if (taskBoard == null) {

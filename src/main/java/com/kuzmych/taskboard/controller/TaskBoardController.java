@@ -48,8 +48,10 @@ public class TaskBoardController {
 		}
 
 		List<TaskStatus> statuses = Arrays.asList(TaskStatus.values());
+
 		model.addAttribute("statuses", statuses);
 		model.addAttribute("taskBoard", taskBoard);
+
 		return "taskboard/show";
 	}
 
@@ -125,8 +127,7 @@ public class TaskBoardController {
 			return "taskboard/edit";
 		}
 
-		Long generalPageId = generalPage.getId();
-		System.out.println("GeneralPage ID: " + generalPageId);
+		
 
 		try {
 
@@ -140,9 +141,8 @@ public class TaskBoardController {
 			return "taskboard/edit";
 		}
 
-		System.out.println("Redirecting to /generalpage/show/" + generalPageId);
-
-		return "redirect:/generalpage/show/" + generalPageId;
+		
+		return "redirect:/generalpage/show/" + generalPage.getId();
 	}
 
 	@GetMapping("/{id}/tasks/new")

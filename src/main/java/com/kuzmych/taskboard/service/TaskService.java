@@ -46,12 +46,8 @@ public class TaskService implements ITaskService {
 		Task task = taskDAO.findById(id);
 		if (task != null) {
 			try {
-
 				taskDAO.deleteById(id);
-				System.out.println("Deleted Task with ID: " + id + " and Version: " + task.getVersion());
 			} catch (OptimisticLockingFailureException ex) {
-				System.err.println("Failed to delete task due to optimistic locking conflict. ID: " + id + " Version: "
-						+ task.getVersion());
 				throw new RuntimeException("Failed to delete task  due to optimistic locking conflict");
 			}
 		} else {
@@ -62,8 +58,6 @@ public class TaskService implements ITaskService {
 	@Transactional
 	@Override
 	public void update(Task task) {
-
-		System.out.println("Updating Task ID: " + task.getId());
 
 		Task existingTask = taskDAO.findById(task.getId());
 

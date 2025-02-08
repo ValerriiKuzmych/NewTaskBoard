@@ -30,9 +30,6 @@ public class TaskBoardDAO implements ITaskBoardDAO {
 	@Override
 	public void save(TaskBoard taskBoard) {
 
-		System.out.println(
-				"Saving TaskBoard in DAO: " + taskBoard.getName() + ", Description: " + taskBoard.getDescription());
-
 		sessionFactory.getCurrentSession().saveOrUpdate(taskBoard);
 	}
 

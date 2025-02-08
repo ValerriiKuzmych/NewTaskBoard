@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Settings</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f4;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.container {
+	background: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	width: 350px;
+	text-align: center;
+}
+
+h2 {
+	margin-bottom: 15px;
+	color: #333;
+}
+
+.checkbox-group {
+	text-align: left;
+	margin: 15px 0;
+}
+
+.checkbox-group label {
+	display: flex;
+	align-items: center;
+	padding: 8px 0;
+	cursor: pointer;
+}
+
+.checkbox-group input {
+	margin-right: 10px;
+}
+
+.btn {
+	background: #28a745;
+	color: #fff;
+	border: none;
+	padding: 10px;
+	border-radius: 5px;
+	cursor: pointer;
+	width: 100%;
+	font-size: 16px;
+}
+
+.btn:hover {
+	background: #218838;
+}
+</style>
+</head>
+<body>
+
+	<div class="container">
+		<h2>Access Settings</h2>
+		<form
+			th:action="@{/users-access/{id}/access-option(id=${taskBoard.id})}"
+			th:object="${taskBoardAccess}" method="post">
+
+
+			<label for="userIdentifier">User ID or Name:</label> <input
+				type="text" id="userIdentifier" name="userIdentifier" required />
+
+
+			<div class="checkbox-group">
+				<label> <input type="checkbox" th:field="*{creatingNewTask}">
+					Create Tasks
+				</label> <label> <input type="checkbox" th:field="*{editingTask}">
+					Edit Tasks
+				</label> <label> <input type="checkbox" th:field="*{deletingTask}">
+					Delete Tasks
+				</label> <label> <input type="checkbox" th:field="*{readingTask}">
+					View Tasks
+				</label>
+			</div>
+
+			<button type="submit" class="btn">Save</button>
+		</form>
+	</div>
+
+</body>
+</html>

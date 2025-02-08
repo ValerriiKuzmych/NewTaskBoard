@@ -1,11 +1,13 @@
 package com.kuzmych.taskboard.entity;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -27,8 +29,15 @@ public class User {
 	@JoinColumn(name = "general_page_id")
 	private GeneralPage generalPage;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<UserTaskBoardAccess> taskBoardAccesses;
+
 	@Version
 	private Long version;
+
+	public User() {
+
+	}
 
 	public Long getVersion() {
 		return version;
@@ -36,10 +45,6 @@ public class User {
 
 	public void setVersion(Long version) {
 		this.version = version;
-	}
-
-	public User() {
-
 	}
 
 	public long getId() {
@@ -88,6 +93,14 @@ public class User {
 
 	public void setGeneralPage(GeneralPage generalPage) {
 		this.generalPage = generalPage;
+	}
+
+	public List<UserTaskBoardAccess> getTaskBoardAccesses() {
+		return taskBoardAccesses;
+	}
+
+	public void setTaskBoardAccesses(List<UserTaskBoardAccess> taskBoardAccesses) {
+		this.taskBoardAccesses = taskBoardAccesses;
 	}
 
 }

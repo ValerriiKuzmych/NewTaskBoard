@@ -19,4 +19,5 @@ public interface IUserService {
 
 	User findByUserName(String userName);
 
+	User findByNameOrId(String userIdentifier);
 }
