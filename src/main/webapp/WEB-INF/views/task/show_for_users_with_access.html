@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Task</title>
+
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f8f9fa;
+	margin: 0;
+	padding: 0;
+	line-height: 1.6;
+}
+
+.container {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+	color: #333;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.btn {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 14px;
+	text-decoration: none;
+	color: #fff;
+	background-color: #007bff;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-right: 10px;
+}
+
+.btn-secondary {
+	background-color: #6c757d;
+}
+
+.btn:hover {
+	background-color: #0056b3;
+}
+
+.btn-secondary:hover {
+	background-color: #5a6268;
+}
+
+p {
+	font-size: 14px;
+	color: #666;
+	margin-top: 20px;
+	text-align: center;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	max-width: 100%;
+	white-space: pre-wrap;
+}
+
+.priority-status {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	font-size: 14px;
+}
+
+.status {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 14px;
+	color: #333;
+}
+
+.status-label {
+	color: #007bff;
+	font-weight: bold;
+}
+
+.priority {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.priority-label {
+	font-weight: bold;
+	color: #333;
+}
+
+.priority-indicator {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+}
+
+.priority-indicator.low {
+	background-color: #007bff;
+}
+
+.priority-indicator.medium {
+	background-color: #ffa500;
+}
+
+.priority-indicator.high {
+	background-color: #dc3545;
+}
+
+.task-date-container {
+	text-align: right;
+	font-size: 12px;
+	color: #6c757d;
+	font-style: italic;
+	margin-top: 10px;
+}
+
+.task-date-container .label {
+	font-weight: bold;
+	color: #333;
+	margin-right: 5px;
+}
+
+.task-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.executor {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #007bff;
+}
+</style>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Navigation Buttons -->
+		<div class="navigation">
+			<a th:if="${task.taskBoard != null}"
+				th:href="@{|/taskboards/show-access/${task.taskBoard.id}|}"
+				class="btn btn-secondary">Go to TaskBoard</a>
+			<!-- <a
+				th:if="${task.taskBoard != null and task.taskBoard.generalPage != null}"
+				th:href="@{|/generalpage/show/${task.taskBoard.generalPage.id}|}"
+				class="btn btn-secondary">Go to General Page</a> -->
+		</div>
+		<h1 th:text="${task.name}">Task Name</h1>
+		<p th:text="${task.description}"
+			style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; white-space: pre-wrap;">
+			Task Description</p>
+
+
+
+
+		<!-- Priority and Actions Section -->
+		<div class="task-info">
+			<div class="priority-status">
+				<!-- Priority -->
+				<span class="priority"> <span th:text="${task.priority}"
+					class="priority-label">Priority</span> <span
+					class="priority-indicator" th:classappend="|${task.priority}|">
+				</span>
+				</span>
+
+				<!-- File Section -->
+				<div class="file-section" th:if="${task.filePath != null}">
+
+					<!-- Existing button for viewing the file -->
+					<a th:href="@{/tasks/files/{fileName}(fileName=${task.filePath})}"
+						target="_blank" class="btn btn-secondary">View File</a>
+					<!-- New button for downloading the file -->
+					<a th:href="@{/tasks/download/{id}(id=${task.id})}"
+						class="btn btn-secondary"> Download File </a>
+
+
+				</div>
+
+
+				<!-- Status -->
+				<span class="status"> <strong>Status:</strong> <span
+					th:text="${task.taskStatus}" class="status-label">Task
+						Status</span>
+
+				</span> <span>Executor: <span th:text="${task.executorName}">Executor
+						Name</span></span>
+			</div>
+
+			<div class="actions">
+				<a th:href="@{/tasks/edit-access/{id}(id=${task.id})}"
+					class="btn btn-secondary">Edit</a> <a
+					th:href="@{/tasks/{id}/delete-access(id=${task.id})}"
+					class="btn btn-secondary">Delete</a>
+			</div>
+		</div>
+
+
+
+		<div class="task-date-container">
+			<span class="label">Date Created:</span> <span class="task-date"
+				th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}">
+			</span>
+		</div>
+	</div>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

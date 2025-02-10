@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Taskboard Details</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles.css?v=1.0">
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f8f9fa;
+	margin: 0;
+	padding: 0;
+}
+
+.task-board {
+	display: flex;
+	gap: 20px;
+	margin: 20px;
+	justify-content: space-between;
+}
+
+.status-column {
+	flex: 1;
+	background-color: #ffffff;
+	border-radius: 8px;
+	padding: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.status-column h2 {
+	text-align: center;
+	margin-bottom: 15px;
+	font-size: 18px;
+	color: #333;
+}
+
+.task-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	justify-content: center;
+}
+
+.task-card {
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	padding: 15px;
+	width: 280px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.task-header h3 {
+	font-size: 16px;
+	color: #333;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.task-info {
+	font-size: 14px;
+	color: #555;
+	margin-bottom: 10px;
+}
+
+.task-info p {
+	margin: 5px 0;
+}
+
+.task-actions {
+	display: flex;
+	justify-content: space-between;
+	margin-top: auto;
+}
+
+.task-actions .btn {
+	font-size: 12px;
+	padding: 8px 12px;
+	border-radius: 4px;
+	text-decoration: none;
+	text-align: center;
+}
+
+.task-actions .btn-primary {
+	background-color: #007bff;
+	color: #fff;
+}
+
+.task-actions .btn-secondary {
+	background-color: #6c757d;
+	color: #fff;
+}
+
+.task-actions .btn-danger {
+	background-color: #dc3545;
+	color: #fff;
+}
+
+.task-actions .btn:hover {
+	opacity: 0.9;
+}
+
+.task-date {
+	text-align: right;
+	font-size: 12px;
+	color: #6c757d;
+	margin-top: 10px;
+	font-style: italic;
+}
+
+.priority-indicator {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	margin-left: 5px;
+}
+
+.priority-indicator.low {
+	background-color: blue;
+}
+
+.priority-indicator.medium {
+	background-color: orange;
+}
+
+.priority-indicator.high {
+	background-color: red;
+}
+
+.priority-indicator.unknown-priority {
+	background-color: gray;
+}
+
+.button-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.right-buttons {
+	display: flex;
+	gap: 10px;
+}
+</style>
+</head>
+<body>
+	<div class="container mt-5">
+
+
+		<h1 th:text="${taskBoard.name}">Taskboard Name</h1>
+		<p th:text="${taskBoard.description}">Taskboard Description</p>
+		<div class="users-with-acces"
+			th:each="access : ${taskBoard.usersWithAccess}">
+			<span th:text="${access.user.name}">User Name</span>
+		</div>
+		<div class="button-container">
+			<a th:href="@{|/taskboards/${taskBoard.id}/tasks-access/new|}"
+				class="btn btn-primary">Add New Task</a>
+
+
+			<div class="right-buttons">
+				<!-- <a th:if="${taskBoard.generalPage != null}"
+					th:href="@{|/generalpage/show/${taskBoard.generalPage.id}|}"
+					class="btn btn-secondary">Go to General Page</a>  -->
+				<a th:href="@{/users-access/{id}/access-option(id=${taskBoard.id})}"
+					class="btn btn-secondary">Delegation Settings</a>
+			</div>
+		</div>
+		<div class="task-board">
+			<!-- Loop through each status -->
+			<div class="status-column" th:each="status : ${statuses}">
+				<h2 th:text="${status}">Status</h2>
+				<div class="task-list">
+
+					<div class="task-card" th:each="task : ${taskBoard.tasks}"
+						th:if="${task.taskStatus.name() == status.name()}">
+						<!-- Task Name -->
+						<div class="task-header">
+							<h3 th:text="${task.name}">Task Name</h3>
+						</div>
+						<!-- Priority and Status -->
+						<div class="priority-status">
+							<span class="priority">Priority: <span
+								th:text="${task.priority}" class="priority-label">Priority</span>
+								<span class="priority-indicator"
+								th:classappend="|${task.priority}|"> </span>
+							</span> <br /> Status: <span th:text="${task.taskStatus}"
+								class="status-label">Status</span>
+						</div>
+
+						<!-- Executor Name -->
+						<div style="text-align: left; margin-top: 20px;">
+							<strong>Executor:</strong> <span th:text="${task.executorName}">Executor
+								Name</span>
+						</div>
+						<!-- Actions and Date -->
+						<div class="task-actions">
+							<a th:href="@{/tasks/show-access/{id}(id=${task.id})}"
+								class="btn btn-primary">Open</a> <a
+								th:href="@{/tasks/edit-access/{id}(id=${task.id})}"
+								class="btn btn-secondary">Edit</a> <a
+								th:href="@{/tasks/{id}/delete-access(id=${task.id})}"
+								class="btn btn-danger">Delete</a>
+						</div>
+						<div class="task-date">
+							<span
+								th:text="${task.createdDate != null ? task.createdDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}">
+								Created Date </span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+	</div>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.kuzmych.taskboard.service;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,23 +41,31 @@ public class UserService implements IUserService {
 	@Transactional(readOnly = true)
 	@Override
 	public User findByUserName(String userName) {
-		return userDAO.findByUserName(userName);
+
+		User user = userDAO.findByUserName(userName);
+
+		return user;
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public User findByNameOrId(String userIdentifier) {
 
+		User user;
+
 		try {
-
 			Long userId = Long.parseLong(userIdentifier);
-
-			return userDAO.findById(userId);
+			user = userDAO.findById(userId);
 
 		} catch (NumberFormatException e) {
-
-			return userDAO.findByUserName(userIdentifier);
+			user = userDAO.findByUserName(userIdentifier);
 		}
+
+		if (user != null) {
+			Hibernate.initialize(user.getTaskBoardAccesses());
+		}
+
+		return user;
 
 	}
 

@@ -23,5 +23,11 @@ public class UserTaskBoardAccessDAO implements IUserTaskBoardAccessDAO {
 		sessionFactory.getCurrentSession().delete(access);
 
 	}
+	
+	@Override
+	public void updateAccess(UserTaskBoardAccess access) {
+		sessionFactory.getCurrentSession().update(access);
+
+	}
 
 }

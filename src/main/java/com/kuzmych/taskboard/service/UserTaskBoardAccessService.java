@@ -1,5 +1,8 @@
 package com.kuzmych.taskboard.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,28 @@ public class UserTaskBoardAccessService implements IUserTaskBoardAccessService {
 
 		User user = userService.findByNameOrId(userIdentifier);
 		TaskBoard taskBoard = taskBoardService.findById(taskBoardId);
+
+//		List<UserTaskBoardAccess> existingUserTaskBoardAccesses = user.getTaskBoardAccesses();
+//
+//		if (existingUserTaskBoardAccesses == null) {
+//			existingUserTaskBoardAccesses = new ArrayList<>();
+//		}
+//
+//		for (UserTaskBoardAccess existingUserTaskBoardAccess : existingUserTaskBoardAccesses) {
+//
+//			if (existingUserTaskBoardAccess.getTaskBoard().getId() == (taskBoardId)) {
+//
+//				existingUserTaskBoardAccess.setCreatingNewTask(access.isCreatingNewTask());
+//				existingUserTaskBoardAccess.setDeletingTask(access.isDeletingTask());
+//				existingUserTaskBoardAccess.setEditingTask(access.isEditingTask());
+//				existingUserTaskBoardAccess.setReadingTask(access.isReadingTask());
+//
+//				userTaskBoardAccessDAO.updateAccess(existingUserTaskBoardAccess);
+//
+//				return;
+//
+//			}
+
 		access.setUser(user);
 		access.setTaskBoard(taskBoard);
 
@@ -40,4 +65,100 @@ public class UserTaskBoardAccessService implements IUserTaskBoardAccessService {
 
 	}
 
+	@Override
+	public boolean chekAccessToTaskBoard(Long loggedInUserId, Long taskBoardId) {
+
+		User user = userService.findById(loggedInUserId);
+		boolean hasAccess = false;
+
+		for (UserTaskBoardAccess access : user.getTaskBoardAccesses()) {
+
+			if (access.getTaskBoard().getId() == taskBoardId) {
+
+				hasAccess = true;
+
+				break;
+			}
+		}
+
+		return hasAccess;
+	}
+
+	@Override
+	public boolean chekAccessToCreatingNewTask(Long loggedInUserId, Long taskBoardId) {
+
+		User user = userService.findById(loggedInUserId);
+		boolean hasAccess = false;
+
+		for (UserTaskBoardAccess access : user.getTaskBoardAccesses()) {
+
+			if (access.getTaskBoard().getId() == taskBoardId && access.isCreatingNewTask() == true) {
+
+				hasAccess = true;
+
+				break;
+			}
+		}
+
+		return hasAccess;
+	}
+
+	@Override
+	public boolean chekAccessToReadingTask(Long loggedInUserId, Long taskBoardId) {
+
+		User user = userService.findById(loggedInUserId);
+		boolean hasAccess = false;
+
+		for (UserTaskBoardAccess access : user.getTaskBoardAccesses()) {
+
+			if (access.getTaskBoard().getId() == taskBoardId && access.isReadingTask() == true) {
+
+				hasAccess = true;
+
+				break;
+			}
+		}
+
+		return hasAccess;
+	}
+
+	@Override
+	public boolean chekAccessToDeletingTask(Long loggedInUserId, Long taskBoardId) {
+
+		User user = userService.findById(loggedInUserId);
+		boolean hasAccess = false;
+
+		for (UserTaskBoardAccess access : user.getTaskBoardAccesses()) {
+
+			if (access.getTaskBoard().getId() == taskBoardId && access.isDeletingTask() == true) {
+
+				hasAccess = true;
+
+				break;
+			}
+		}
+
+		return hasAccess;
+
+	}
+
+	@Override
+	public boolean chekAccessToEditingTask(Long loggedInUserId, Long taskBoardId) {
+
+		User user = userService.findById(loggedInUserId);
+		boolean hasAccess = false;
+
+		for (UserTaskBoardAccess access : user.getTaskBoardAccesses()) {
+
+			if (access.getTaskBoard().getId() == taskBoardId && access.isEditingTask() == true) {
+
+				hasAccess = true;
+
+				break;
+			}
+		}
+
+		return hasAccess;
+
+	}
 }

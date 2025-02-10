@@ -153,12 +153,7 @@ body {
 				<p th:text="${otherTaskBoard.taskBoard.description}">Description</p>
 				<div class="card-actions">
 					<a
-						th:href="@{/taskboards/show/{id}(id=${otherTaskBoard.taskBoard.id})}">Open</a>
-					<a
-						th:href="@{/taskboards/edit/{id}(id=${otherTaskBoard.taskBoard.id})}">Edit</a>
-					<a
-						th:href="@{/taskboards/{id}/delete(id=${otherTaskBoard.taskBoard.id})}"
-						class="btn-delete">Delete</a>
+						th:href="@{/taskboards/show-access/{id}(id=${otherTaskBoard.taskBoard.id})}">Open</a>
 				</div>
 			</div>
 		</div>

@@ -25,6 +25,7 @@ import com.kuzmych.taskboard.entity.TaskPriority;
 import com.kuzmych.taskboard.entity.TaskStatus;
 import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.service.ITaskBoardService;
+import com.kuzmych.taskboard.service.IUserTaskBoardAccessService;
 
 @Controller
 @RequestMapping("/taskboards")
@@ -32,6 +33,8 @@ public class TaskBoardController {
 
 	@Autowired
 	private ITaskBoardService taskBoardService;
+	@Autowired
+	private IUserTaskBoardAccessService userTaskBoardAccessService;
 
 	@GetMapping("/show/{id}")
 	public String showTaskBoard(@PathVariable Long id, Model model, HttpSession session) {
@@ -53,6 +56,28 @@ public class TaskBoardController {
 		model.addAttribute("taskBoard", taskBoard);
 
 		return "taskboard/show";
+	}
+
+	@GetMapping("/show-access/{id}")
+	public String showTaskBoardForUsersWithAccess(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
+		TaskBoard taskBoard = taskBoardService.findById(id);
+
+		if (taskBoard == null || !userTaskBoardAccessService.chekAccessToTaskBoard(loggedInUser.getId(), id)) {
+			return "error/403";
+		}
+
+		List<TaskStatus> statuses = Arrays.asList(TaskStatus.values());
+
+		model.addAttribute("statuses", statuses);
+		model.addAttribute("taskBoard", taskBoard);
+
+		return "taskboard/show_for_users_with_access";
 	}
 
 	@PostMapping
@@ -127,8 +152,6 @@ public class TaskBoardController {
 			return "taskboard/edit";
 		}
 
-		
-
 		try {
 
 			taskBoardService.update(taskBoard);
@@ -141,7 +164,6 @@ public class TaskBoardController {
 			return "taskboard/edit";
 		}
 
-		
 		return "redirect:/generalpage/show/" + generalPage.getId();
 	}
 
@@ -158,9 +180,29 @@ public class TaskBoardController {
 		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
 			return "error/403";
 		}
+
 		model.addAttribute("task", new Task());
 		model.addAttribute("taskBoardId", id);
 		return "taskboard/add-task";
+	}
+
+	@GetMapping("/{id}/tasks-access/new")
+	public String showAddTaskFormForUsersWithAccess(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
+		TaskBoard taskBoard = taskBoardService.findById(id);
+
+		if (taskBoard == null || !userTaskBoardAccessService.chekAccessToCreatingNewTask(loggedInUser.getId(), id)) {
+			return "error/403";
+		}
+
+		model.addAttribute("task", new Task());
+		model.addAttribute("taskBoardId", id);
+		return "taskboard/add-task-for-users-with-access";
 	}
 
 	@PostMapping("/{id}/tasks")
@@ -178,6 +220,24 @@ public class TaskBoardController {
 		}
 		taskBoardService.addTaskToTaskBoard(id, task);
 		return "redirect:/taskboards/show/" + id;
+	}
+
+	@PostMapping("/{id}/tasks-access")
+	public String addTaskToTaskBoardForUsersWIthAccess(@PathVariable Long id, @Valid @ModelAttribute Task task,
+			BindingResult result) {
+
+		if (task.getTaskStatus() == null) {
+			task.setTaskStatus(TaskStatus.NEW);
+		}
+		if (task.getPriority() == null) {
+			task.setPriority(TaskPriority.LOW);
+		}
+		if (result.hasErrors()) {
+
+			return "taskboard/add-task";
+		}
+		taskBoardService.addTaskToTaskBoard(id, task);
+		return "redirect:/taskboards/show-access/" + id;
 	}
 
 }

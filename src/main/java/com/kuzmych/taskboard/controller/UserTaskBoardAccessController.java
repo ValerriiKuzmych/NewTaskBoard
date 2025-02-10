@@ -73,8 +73,6 @@ public class UserTaskBoardAccessController {
 //			return "redirect:/users/login";
 //		}
 
-		
-
 //		if (!taskBoard.getGeneralPage().getUser().equals(currentUser)) {
 //
 //			return "error-unauthorized";
