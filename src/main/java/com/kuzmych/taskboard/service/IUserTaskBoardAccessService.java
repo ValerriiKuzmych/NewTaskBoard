@@ -6,7 +6,7 @@ public interface IUserTaskBoardAccessService {
 
 	void giveAccessToTaskBoard(Long taskBoardId, String userIdentifier, UserTaskBoardAccess access);
 
-	void deleteAccessToTaskBoard(Long taskBoardId, Long userId);
+	void deleteAccessToTaskBoard(Long taskBoardId, String userIdentifier);
 
 	boolean chekAccessToTaskBoard(Long loggedInUserId, Long taskBoardId);
 

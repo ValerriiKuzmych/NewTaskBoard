@@ -1,6 +1,7 @@
 package com.kuzmych.taskboard.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,41 +28,61 @@ public class UserTaskBoardAccessService implements IUserTaskBoardAccessService {
 	public void giveAccessToTaskBoard(Long taskBoardId, String userIdentifier, UserTaskBoardAccess access) {
 
 		User user = userService.findByNameOrId(userIdentifier);
+
 		TaskBoard taskBoard = taskBoardService.findById(taskBoardId);
 
-//		List<UserTaskBoardAccess> existingUserTaskBoardAccesses = user.getTaskBoardAccesses();
-//
-//		if (existingUserTaskBoardAccesses == null) {
-//			existingUserTaskBoardAccesses = new ArrayList<>();
-//		}
-//
-//		for (UserTaskBoardAccess existingUserTaskBoardAccess : existingUserTaskBoardAccesses) {
-//
-//			if (existingUserTaskBoardAccess.getTaskBoard().getId() == (taskBoardId)) {
-//
-//				existingUserTaskBoardAccess.setCreatingNewTask(access.isCreatingNewTask());
-//				existingUserTaskBoardAccess.setDeletingTask(access.isDeletingTask());
-//				existingUserTaskBoardAccess.setEditingTask(access.isEditingTask());
-//				existingUserTaskBoardAccess.setReadingTask(access.isReadingTask());
-//
-//				userTaskBoardAccessDAO.updateAccess(existingUserTaskBoardAccess);
-//
-//				return;
-//
-//			}
+		List<UserTaskBoardAccess> existingUserTaskBoardAccesses = taskBoard.getUsersWithAccess();
 
-		access.setUser(user);
-		access.setTaskBoard(taskBoard);
+		if (existingUserTaskBoardAccesses == null) {
+			existingUserTaskBoardAccesses = new ArrayList<>();
+		}
 
-		userTaskBoardAccessDAO.saveAccess(access);
+		boolean accessUpdated = false;
+
+		for (UserTaskBoardAccess existingAccess : existingUserTaskBoardAccesses) {
+			if (existingAccess.getUser().getId() == (user.getId())) {
+
+				existingAccess.setCreatingNewTask(access.isCreatingNewTask());
+				existingAccess.setDeletingTask(access.isDeletingTask());
+				existingAccess.setEditingTask(access.isEditingTask());
+				existingAccess.setReadingTask(access.isReadingTask());
+
+				userTaskBoardAccessDAO.updateAccess(existingAccess);
+				accessUpdated = true;
+				break;
+			}
+		}
+
+		if (!accessUpdated) {
+
+			access.setUser(user);
+			access.setTaskBoard(taskBoard);
+			userTaskBoardAccessDAO.saveAccess(access);
+		}
 
 	}
 
 	@Transactional
 	@Override
-	public void deleteAccessToTaskBoard(Long taskBoardId, Long userId) {
+	public void deleteAccessToTaskBoard(Long taskBoardId, String userIdentifier) {
 
-//		userTaskBoardAccessDAO.deleteAccess(access);
+		TaskBoard taskBoard;
+		taskBoard = taskBoardService.findById(taskBoardId);
+
+		User user;
+		user = userService.findByNameOrId(userIdentifier);
+
+		List<UserTaskBoardAccess> existingUserTaskBoardAccesses = taskBoard.getUsersWithAccess();
+
+		Iterator<UserTaskBoardAccess> iterator = existingUserTaskBoardAccesses.iterator();
+		while (iterator.hasNext()) {
+			UserTaskBoardAccess existingAccess = iterator.next();
+			if (existingAccess.getUser().getId() == (user.getId())) {
+				iterator.remove();
+				userTaskBoardAccessDAO.deleteAccess(existingAccess);
+				break;
+			}
+		}
 
 	}
 

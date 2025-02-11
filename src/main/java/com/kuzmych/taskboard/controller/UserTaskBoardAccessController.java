@@ -29,7 +29,7 @@ public class UserTaskBoardAccessController {
 	IUserService userService;
 
 	@Autowired
-	IUserTaskBoardAccessService usertaskBoardAccessServcie;
+	IUserTaskBoardAccessService userTaskBoardAccessService;
 
 	@GetMapping("/{id}/access-option")
 	public String showUsersAccessForm(@PathVariable Long id, Model model, HttpSession session) {
@@ -78,7 +78,29 @@ public class UserTaskBoardAccessController {
 //			return "error-unauthorized";
 //		}
 
-		usertaskBoardAccessServcie.giveAccessToTaskBoard(id, userIdentifier, taskBoardacces);
+		userTaskBoardAccessService.giveAccessToTaskBoard(id, userIdentifier, taskBoardacces);
+
+		return "redirect:/taskboards/show/" + id;
+
+	}
+
+	@PostMapping("/{id}/delete-access")
+	public String deleteUsersAccess(@PathVariable Long id, @RequestParam String userIdentifier,
+			@ModelAttribute UserTaskBoardAccess taskBoardacces, HttpSession session) {
+
+//		User currentUser = (User) session.getAttribute("currentUser");
+//
+//		if (currentUser == null) {
+//
+//			return "redirect:/users/login";
+//		}
+
+//		if (!taskBoard.getGeneralPage().getUser().equals(currentUser)) {
+//
+//			return "error-unauthorized";
+//		}
+
+		userTaskBoardAccessService.deleteAccessToTaskBoard(id, userIdentifier);
 
 		return "redirect:/taskboards/show/" + id;
 
