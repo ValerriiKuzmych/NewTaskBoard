@@ -1,5 +1,6 @@
 package com.kuzmych.taskboard.service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -69,10 +70,41 @@ public class TaskService implements ITaskService {
 			existingTask.setPriority(task.getPriority());
 			existingTask.setTaskStatus(task.getTaskStatus());
 			existingTask.setExecutorName(task.getExecutorName());
+			existingTask.setDeadlineDate(task.getDeadlineDate());
 			taskDAO.update(existingTask);
 		} else {
 			throw new EntityNotFoundException("Task not found with ID: " + task.getId());
 		}
+	}
+
+	@Override
+	public String getTimeLeft(Task task) {
+
+		if (task == null || task.getDeadlineDate() == null) {
+			return null;
+		}
+		LocalDateTime now = LocalDateTime.now();
+
+		LocalDateTime deadline = task.getDeadlineDate();
+
+		if (deadline.isBefore(now)) {
+
+			Duration overdue = Duration.between(deadline, now);
+			long overdueDays = overdue.toDays();
+			return "Overdue by " + overdueDays + " days";
+		}
+
+		Duration duration = Duration.between(now, deadline);
+
+		if (duration.isZero() || duration.isNegative()) {
+			return "Deadline is now!";
+		}
+
+		long days = duration.toDays();
+		long hours = duration.toHours() % 24;
+		long minutes = duration.toMinutes() % 60;
+
+		return String.format("%d days, %02d:%02d", days, hours, minutes);
 	}
 
 }

@@ -40,7 +40,7 @@ public class TaskController {
 	IUserTaskBoardAccessService userTaskBoardAccessService;
 
 	@GetMapping("/show/{id}")
-	public String showTaskBoard(@PathVariable Long id, Model model, HttpSession session) {
+	public String showTask(@PathVariable Long id, Model model, HttpSession session) {
 
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		if (loggedInUser == null) {
@@ -53,13 +53,14 @@ public class TaskController {
 				|| !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
 			return "error/403";
 		}
-
+		String timeLeft = taskService.getTimeLeft(task);
+		model.addAttribute("timeLeft", timeLeft);
 		model.addAttribute("task", task);
 		return "task/show";
 	}
 
 	@GetMapping("/show-access/{id}")
-	public String showTaskBoardFoUsersWithAccess(@PathVariable Long id, Model model, HttpSession session) {
+	public String showTaskForUsersWithAccess(@PathVariable Long id, Model model, HttpSession session) {
 
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
 		if (loggedInUser == null) {
@@ -72,7 +73,8 @@ public class TaskController {
 				task.getTaskBoard().getId())) {
 			return "error/403";
 		}
-
+		String timeLeft = taskService.getTimeLeft(task);
+		model.addAttribute("timeLeft", timeLeft);
 		model.addAttribute("task", task);
 		return "task/show_for_users_with_access";
 	}
@@ -129,15 +131,14 @@ public class TaskController {
 			return "error/403";
 		}
 
-		System.out.println("Editing Task ID: " + id + " - Task: " + task);
-
 		TaskBoard taskBoard = task.getTaskBoard();
 
 		if (taskBoard == null) {
 			return "error/404";
 		}
-
+		String timeLeft = taskService.getTimeLeft(task);
 		model.addAttribute("task", task);
+		model.addAttribute("timeLeft", timeLeft);
 		model.addAttribute("taskBoard", taskBoard);
 
 		return "task/edit";
@@ -175,7 +176,7 @@ public class TaskController {
 			@RequestParam(value = "file", required = false) MultipartFile file, Model model) {
 
 		task.setId(id);
-
+		Task existingTask = taskService.findById(id);
 		if (file != null && !file.isEmpty()) {
 			try {
 
@@ -197,26 +198,25 @@ public class TaskController {
 
 			} catch (IOException e) {
 				model.addAttribute("error", "File upload failed: " + e.getMessage());
-				return "task/edit-for-users-with-access";
+				return "task/edit";
 			}
 		}
 
 		taskService.update(task);
-		return "redirect:/taskboards/show-access/" + task.getTaskBoard().getId();
+		return "redirect:/taskboards/show/" + existingTask.getTaskBoard().getId();
 	}
 
-	
 	@PostMapping("/update-access")
 	public String updateTaskForUsersWithAccess(@RequestParam("id") Long id, @ModelAttribute Task task,
 			@RequestParam(value = "file", required = false) MultipartFile file, Model model) {
 
 		task.setId(id);
+		Task existingTask = taskService.findById(id);
 
 		if (file != null && !file.isEmpty()) {
 			try {
-
 				String originalFileName = file.getOriginalFilename();
-				String sanitizedFileName = originalFileName != null
+				String sanitizedFileName = (originalFileName != null)
 						? originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")
 						: "default_file";
 				String fileName = System.currentTimeMillis() + "_" + sanitizedFileName;
@@ -226,7 +226,6 @@ public class TaskController {
 					Files.createDirectories(uploadDir);
 				}
 				Path filePath = uploadDir.resolve(fileName);
-
 				Files.write(filePath, file.getBytes());
 
 				task.setFilePath(fileName);
@@ -238,8 +237,9 @@ public class TaskController {
 		}
 
 		taskService.update(task);
-		return "redirect:/taskboards/show-access/" + task.getTaskBoard().getId();
+		return "redirect:/taskboards/show-access/" + existingTask.getTaskBoard().getId();
 	}
+
 	@GetMapping("/download/{id}")
 	public void downloadFile(@PathVariable("id") Long taskId, HttpServletResponse response) {
 		String uploadDir = "C:\\TaskBoard\\uploads_files_for_tasks\\";

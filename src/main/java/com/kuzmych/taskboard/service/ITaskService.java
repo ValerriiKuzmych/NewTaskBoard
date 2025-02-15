@@ -16,6 +16,6 @@ public interface ITaskService {
 
 	void update(Task Task);
 
-	/* void updateTaskStatus(Long taskId, TaskStatus newStatus); */
+	String getTimeLeft(Task task);
 
 }

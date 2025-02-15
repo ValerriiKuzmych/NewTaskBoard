@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "task")
 public class Task {
@@ -27,7 +29,7 @@ public class Task {
 
 	@Column(name = "executor_name")
 	private String executorName;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "priority", nullable = false)
 	private TaskPriority priority;
@@ -38,6 +40,10 @@ public class Task {
 
 	@Column(name = "created_date", nullable = false, updatable = false)
 	private LocalDateTime createdDate;
+
+	@Column(name = "deadline_date", nullable = true, updatable = true)
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime deadlineDate;
 
 	@ManyToOne
 	@JoinColumn(name = "task_board_id")
@@ -81,8 +87,6 @@ public class Task {
 	public void setCreatedDate(LocalDateTime createdDate) {
 		this.createdDate = createdDate;
 	}
-
-
 
 	public String getExecutorName() {
 		return executorName;
@@ -130,5 +134,13 @@ public class Task {
 
 	public void setPriority(TaskPriority priority) {
 		this.priority = priority;
+	}
+
+	public LocalDateTime getDeadlineDate() {
+		return deadlineDate;
+	}
+
+	public void setDeadlineDate(LocalDateTime deadlineDate) {
+		this.deadlineDate = deadlineDate;
 	}
 }
