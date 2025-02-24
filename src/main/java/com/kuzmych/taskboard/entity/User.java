@@ -1,5 +1,6 @@
 package com.kuzmych.taskboard.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -24,6 +25,9 @@ public class User {
 	private String email;
 	private String login;
 	private String password;
+
+	private String resetToken;
+	private LocalDateTime tokenExpiration;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "general_page_id")
@@ -101,6 +105,22 @@ public class User {
 
 	public void setTaskBoardAccesses(List<UserTaskBoardAccess> taskBoardAccesses) {
 		this.taskBoardAccesses = taskBoardAccesses;
+	}
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
+
+	public LocalDateTime getTokenExpiration() {
+		return tokenExpiration;
+	}
+
+	public void setTokenExpiration(LocalDateTime tokenExpiration) {
+		this.tokenExpiration = tokenExpiration;
 	}
 
 }

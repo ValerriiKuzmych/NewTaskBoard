@@ -73,7 +73,7 @@ public class SpringConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public CommonsMultipartResolver multipartResolver() {
+	CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 		multipartResolver.setMaxUploadSize(10485760);
 		return multipartResolver;
@@ -94,7 +94,7 @@ public class SpringConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+	HiddenHttpMethodFilter hiddenHttpMethodFilter() {
 		return new HiddenHttpMethodFilter();
 	}
 
