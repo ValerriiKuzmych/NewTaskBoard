@@ -51,4 +51,17 @@ public class UserDAO implements IUserDAO {
 				.uniqueResult();
 	}
 
+	@Override
+	public User findByUserEmail(String userEmail) {
+		return sessionFactory.getCurrentSession().createQuery("FROM User WHERE email = :email", User.class)
+				.setParameter("email", userEmail).uniqueResult();
+	}
+
+	@Override
+	public User findByUserResetToken(String token) {
+
+		return sessionFactory.getCurrentSession().createQuery("FROM User WHERE resetToken = :token", User.class)
+				.setParameter("token", token).uniqueResult();
+	}
+
 }

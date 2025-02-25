@@ -1,47 +1,89 @@
 package com.kuzmych.taskboard.service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.kuzmych.taskboard.entity.User;
 
-import com.kuzmych.taskboard.dao.IUserDAO;
+public class PasswordResetService implements IPasswordResetService {
 
-public class PasswordResetService implements IPasswordResetService{
-	
-	
 	@Autowired
-    private IUserDAO userDAO;
+	private IUserService userService;
 
-    @Autowired
-    private JavaMailSender mailSender;
-    
-    private BCryptPasswordEncoder passwordEncoder;
-    
-    public PasswordResetService() {
-		this.passwordEncoder = new BCryptPasswordEncoder();
-	}
+	@Autowired
+	private JavaMailSender mailSender;
+
+	@Autowired
+	private PasswordService passwordService;
 
 	@Override
 	public boolean sendPasswordResetEmail(String email) {
-		// TODO Auto-generated method stub
-		return false;
+
+		User user = userService.findByUserEmail(email);
+
+		if (user == null) {
+			return false;
+		}
+
+		String token = UUID.randomUUID().toString();
+
+		user.setResetToken(token);
+		user.setTokenExpiration(LocalDateTime.now().plusHours(1));
+
+		userService.updatePassword(user);
+
+		String resetLink = "http://localhost:8080/reset-password?token=" + token;
+
+		sendEmail(user.getEmail(), resetLink);
+
+		return true;
 	}
 
 	@Override
 	public boolean isValidToken(String token) {
-		// TODO Auto-generated method stub
-		return false;
+
+		User user = userService.findByUserResetToken(token);
+
+		if (user == null) {
+			return false;
+		}
+
+		return user.getTokenExpiration().isAfter(LocalDateTime.now());
 	}
 
 	@Override
 	public boolean resetPassword(String token, String newPassword) {
-		// TODO Auto-generated method stub
-		return false;
+
+		User user = userService.findByUserResetToken(token);
+
+		if (user == null) {
+			return false;
+		}
+
+		if (user.getTokenExpiration().isBefore(LocalDateTime.now())) {
+
+			return false;
+		}
+
+		user.setPassword(passwordService.hashPassword(newPassword));
+		user.setResetToken(null);
+		user.setTokenExpiration(null);
+		userService.updatePassword(user);
+
+		return true;
 	}
-	
-	 private void sendEmail(String to, String resetLink) {
-		 
-		// TODO Auto-generated method stub
-	 };
+
+	private void sendEmail(String to, String resetLink) {
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(to);
+		message.setSubject("Password Reset Request");
+		message.setText("Click the link to reset your password: " + resetLink);
+		mailSender.send(message);
+
+	};
 
 }

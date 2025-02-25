@@ -52,6 +52,17 @@ public class UserService implements IUserService {
 
 	@Transactional(readOnly = true)
 	@Override
+	public User findByUserEmail(String userEmail) {
+
+		User user;
+
+		user = userDAO.findByUserEmail(userEmail);
+
+		return user;
+	}
+
+	@Transactional(readOnly = true)
+	@Override
 	public User findByNameOrId(String userIdentifier) {
 
 		User user;
@@ -84,6 +95,7 @@ public class UserService implements IUserService {
 		userDAO.deleteById(id);
 	}
 
+	@Transactional
 	@Override
 	public void update(User user) {
 		User existingUser = findById(user.getId());
@@ -93,6 +105,7 @@ public class UserService implements IUserService {
 			existingUser.setEmail(user.getEmail());
 			existingUser.setLogin(user.getLogin());
 			existingUser.setTaskBoardAccesses(user.getTaskBoardAccesses());
+
 			if (user.getVersion() == null) {
 				user.setVersion(0L); // Default version
 			}
@@ -101,6 +114,29 @@ public class UserService implements IUserService {
 
 			userDAO.update(existingUser);
 			System.out.println("Updated User: " + existingUser);
+		} else {
+			throw new EntityNotFoundException("User not found");
+		}
+	}
+
+	@Transactional
+	@Override
+	public void updatePassword(User user) {
+		User existingUser = findById(user.getId());
+
+		if (existingUser != null) {
+
+			existingUser.setResetToken(user.getResetToken());
+			existingUser.setTokenExpiration(user.getTokenExpiration());
+			existingUser.setPassword(user.getPassword());
+
+			if (user.getVersion() == null) {
+				user.setVersion(0L); // Default version
+			}
+
+			existingUser.setVersion(user.getVersion());
+
+			userDAO.update(existingUser);
 		} else {
 			throw new EntityNotFoundException("User not found");
 		}
@@ -150,6 +186,16 @@ public class UserService implements IUserService {
 		loggedInUser.getLogin();
 
 		return true;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public User findByUserResetToken(String token) {
+		User user;
+
+		user = userDAO.findByUserResetToken(token);
+
+		return user;
 	};
 
 }

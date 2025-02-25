@@ -13,11 +13,17 @@ public interface IUserService {
 
 	void delete(Long id);
 
+	void updatePassword(User user);
+
 	boolean authenticateUser(String username, String plainPassword);
 
-	public User convertingToUser(UserRegistrationDTO userDTO);
+	User convertingToUser(UserRegistrationDTO userDTO);
 
 	User findByUserName(String userName);
 
 	User findByNameOrId(String userIdentifier);
+
+	User findByUserEmail(String userEmail);
+
+	User findByUserResetToken(String token);
 }
