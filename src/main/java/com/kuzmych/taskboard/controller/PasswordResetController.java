@@ -19,32 +19,54 @@ public class PasswordResetController {
 
 	@GetMapping("/show")
 	public String showResetPasswordPage() {
-		// TODO Auto-generated method stub
-		return "TO-DO";
+
+		return "reset-password/show-reset-pasword-form";
 	};
 
-	@PostMapping
+	@PostMapping("/show")
 	public String processResetRequest(@RequestParam String email, Model model) {
 
-		// TODO Auto-generated method stub
+		boolean emailSent = passwordResetService.sendPasswordResetEmail(email);
 
-		return "TO-DO";
+		if (emailSent) {
+			model.addAttribute("message", "Check your email for the reset link.");
+
+		} else {
+
+			model.addAttribute("error", "Email not found.");
+
+		}
+
+		return "redirect:/reset-password/confirm";
 	};
 
 	@GetMapping("/confirm")
 	public String showNewPasswordForm(@RequestParam String token, Model model) {
 
-		// TODO Auto-generated method stub
+		if (!passwordResetService.isValidToken(token)) {
 
-		return "TO-DO";
+			model.addAttribute("error", "Invalid or expired token.");
+		}
+
+		model.addAttribute("token", token);
+
+		return "reset-password/show-new-password-form";
 	}
 
 	@PostMapping("/confirm")
 	public String processNewPassword(@RequestParam String token, @RequestParam String password, Model model) {
 
-		// TODO Auto-generated method stub
+		boolean success = passwordResetService.resetPassword(token, password);
 
-		return "TO-DO";
+		if (success) {
+			return "redirect:/users/login";
+		} else {
+
+			model.addAttribute("error", "invalid token or expired link.");
+
+			return "reset-password-error";
+		}
+
 	}
 
 }
