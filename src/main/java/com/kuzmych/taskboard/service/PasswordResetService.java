@@ -1,4 +1,4 @@
-package com.kuzmych.taskboard.service;
+  package com.kuzmych.taskboard.service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -38,7 +38,7 @@ public class PasswordResetService implements IPasswordResetService {
 
 		userService.updatePassword(user);
 
-		String resetLink = "http://localhost:8080/reset-password?token=" + token;
+		String resetLink = "http://localhost:8080/taskboardmanager/reset-password/confirm?token=" + token;
 
 		sendEmail(user.getEmail(), resetLink);
 
@@ -63,6 +63,7 @@ public class PasswordResetService implements IPasswordResetService {
 		User user = userService.findByUserResetToken(token);
 
 		if (user == null) {
+
 			return false;
 		}
 
@@ -85,6 +86,8 @@ public class PasswordResetService implements IPasswordResetService {
 		message.setTo(to);
 		message.setSubject("Password Reset Request");
 		message.setText("Click the link to reset your password: " + resetLink);
+		//enter email
+		message.setFrom("");
 		mailSender.send(message);
 
 	};

@@ -37,12 +37,12 @@ public class PasswordResetController {
 
 		}
 
-		return "redirect:/reset-password/confirm";
+		return "reset-password/message";
 	};
 
 	@GetMapping("/confirm")
 	public String showNewPasswordForm(@RequestParam String token, Model model) {
-
+		
 		if (!passwordResetService.isValidToken(token)) {
 
 			model.addAttribute("error", "Invalid or expired token.");
