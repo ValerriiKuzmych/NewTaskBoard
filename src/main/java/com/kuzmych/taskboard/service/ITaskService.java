@@ -14,7 +14,7 @@ public interface ITaskService {
 
 	void delete(Long id);
 
-	void update(Task Task);
+	Task update(Task Task);
 
 	String getTimeLeft(Task task);
 

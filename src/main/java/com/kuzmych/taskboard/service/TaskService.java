@@ -58,7 +58,7 @@ public class TaskService implements ITaskService {
 
 	@Transactional
 	@Override
-	public void update(Task task) {
+	public Task update(Task task) {
 
 		Task existingTask = taskDAO.findById(task.getId());
 
@@ -72,9 +72,13 @@ public class TaskService implements ITaskService {
 			existingTask.setExecutorName(task.getExecutorName());
 			existingTask.setDeadlineDate(task.getDeadlineDate());
 			taskDAO.update(existingTask);
+
+			return existingTask;
+
 		} else {
 			throw new EntityNotFoundException("Task not found with ID: " + task.getId());
 		}
+
 	}
 
 	@Override
