@@ -21,7 +21,7 @@ public class HibernateUtil {
 	private DataSource dataSource;
 
 	@Bean(name = "sessionFactory")
-	public LocalSessionFactoryBean sessionFactory() {
+	LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource);
 		sessionFactory.setPackagesToScan("com.kuzmych.taskboard");
@@ -30,7 +30,7 @@ public class HibernateUtil {
 	}
 
 	@Bean
-	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+	HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
 		HibernateTransactionManager txManager = new HibernateTransactionManager();
 		txManager.setSessionFactory(sessionFactory);
 		return txManager;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Task Change History</title>
+<link rel="stylesheet" href="/css/styles.css">
+
+</head>
+<body>
+	<h1>Task Change History</h1>
+
+	<h2 th:text="${task.title}">Task Title</h2>
+
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Field</th>
+				<th>Old Value</th>
+				<th>New Value</th>
+				<th>Changed By</th>
+				<th>Change Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="log : ${logs}">
+				<td th:text="${log.fieldName}">Field Name</td>
+				<td th:text="${log.oldValue}">Old Value</td>
+				<td th:text="${log.newValue}">New Value</td>
+				<td th:text="${log.changedBy}">Modified By</td>
+				<td
+					th:text="${#temporals.format(log.changedAt, 'dd-MM-yyyy HH:mm')}">Date</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a th:href="@{/tasks/show/{id}(id=${task.id})}">Back to Task</a>
+</body>
+</html>

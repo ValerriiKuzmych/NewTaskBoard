@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.entity.TaskLog;
 import com.kuzmych.taskboard.entity.User;
+import com.kuzmych.taskboard.repository.TaskLogRepository;
 import com.kuzmych.taskboard.service.ITaskService;
 import com.kuzmych.taskboard.service.IUserTaskBoardAccessService;
 
@@ -35,6 +39,9 @@ public class TaskController {
 
 	@Autowired
 	private ITaskService taskService;
+
+	@Autowired
+	private TaskLogRepository taskLogRepository;
 
 	@Autowired
 	IUserTaskBoardAccessService userTaskBoardAccessService;
@@ -304,5 +311,26 @@ public class TaskController {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			System.out.println("File not found: " + file.getAbsolutePath());
 		}
+	}
+
+	@GetMapping("/{id}/logs")
+	public String getTaskLogs(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
+		Task task = taskService.findById(id);
+		if (task == null || !userTaskBoardAccessService.chekAccessToReadingTask(loggedInUser.getId(),
+				task.getTaskBoard().getId())) {
+			return "error/403";
+		}
+
+		List<TaskLog> logs = taskLogRepository.findByTaskId(id);
+
+		model.addAttribute("task", task);
+		model.addAttribute("logs", logs);
+		return "task/logs";
 	}
 }

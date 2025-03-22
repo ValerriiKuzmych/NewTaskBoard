@@ -24,7 +24,7 @@ public class TaskLog {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "task_id", nullable = false)
+	@JoinColumn(name = "task_id", nullable = true)
 	private Task task;
 
 	@Column(nullable = false)
