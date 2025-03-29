@@ -25,7 +25,7 @@ import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.entity.TaskLog;
 import com.kuzmych.taskboard.entity.User;
-import com.kuzmych.taskboard.repository.TaskLogRepository;
+import com.kuzmych.taskboard.service.ITaskLogService;
 import com.kuzmych.taskboard.service.ITaskService;
 import com.kuzmych.taskboard.service.IUserTaskBoardAccessService;
 
@@ -41,7 +41,7 @@ public class TaskController {
 	private ITaskService taskService;
 
 	@Autowired
-	private TaskLogRepository taskLogRepository;
+	private ITaskLogService taskLogService;
 
 	@Autowired
 	IUserTaskBoardAccessService userTaskBoardAccessService;
@@ -322,12 +322,13 @@ public class TaskController {
 		}
 
 		Task task = taskService.findById(id);
-		if (task == null || !userTaskBoardAccessService.chekAccessToReadingTask(loggedInUser.getId(),
-				task.getTaskBoard().getId())) {
+
+		if (task == null
+				|| !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
 			return "error/403";
 		}
 
-		List<TaskLog> logs = taskLogRepository.findByTaskId(id);
+		List<TaskLog> logs = taskLogService.getAllLogs(id);
 
 		model.addAttribute("task", task);
 		model.addAttribute("logs", logs);

@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
 import com.kuzmych.taskboard.entity.Task;
 
 @Repository
@@ -14,6 +15,8 @@ public class TaskDAO implements ITaskDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	
 
 	@Override
 	public Task findById(Long id) {

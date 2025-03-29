@@ -88,7 +88,7 @@ public class UserTaskBoardAccessService implements IUserTaskBoardAccessService {
 
 	@Override
 	public boolean chekAccessToTaskBoard(Long loggedInUserId, Long taskBoardId) {
-
+		
 		User user = userService.findById(loggedInUserId);
 		boolean hasAccess = false;
 
@@ -101,7 +101,7 @@ public class UserTaskBoardAccessService implements IUserTaskBoardAccessService {
 				break;
 			}
 		}
-
+		
 		return hasAccess;
 	}
 

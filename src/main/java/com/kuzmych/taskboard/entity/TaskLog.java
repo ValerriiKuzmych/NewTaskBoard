@@ -2,7 +2,6 @@ package com.kuzmych.taskboard.entity;
 
 import lombok.Data;
 
-
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -97,7 +96,5 @@ public class TaskLog {
 	public void setChangedAt(LocalDateTime changedAt) {
 		this.changedAt = changedAt;
 	}
-	
-	
 
 }

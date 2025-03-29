@@ -9,7 +9,7 @@
 <body>
 	<h1>Task Change History</h1>
 
-	<h2 th:text="${task.title}">Task Title</h2>
+	<h2 th:text="${task.name}">Task Title</h2>
 
 	<table border="1">
 		<thead>
@@ -28,7 +28,7 @@
 				<td th:text="${log.newValue}">New Value</td>
 				<td th:text="${log.changedBy}">Modified By</td>
 				<td
-					th:text="${#temporals.format(log.changedAt, 'dd-MM-yyyy HH:mm')}">Date</td>
+					th:text="${log.changedAt != null ? log.changedAt.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}">Date</td>
 			</tr>
 		</tbody>
 	</table>
