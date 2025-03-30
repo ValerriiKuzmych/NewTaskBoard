@@ -23,10 +23,9 @@ public class TaskLogService implements ITaskLogService {
 
 	@Transactional
 	@Override
-	public void saveLog(TaskLog taskLog) {
-		
+	public void save(TaskLog taskLog) {
+
 		taskLogDAO.saveLog(taskLog);
 	}
 
-	
 }

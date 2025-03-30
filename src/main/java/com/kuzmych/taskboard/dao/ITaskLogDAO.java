@@ -10,4 +10,6 @@ public interface ITaskLogDAO {
 
 	void saveLog(TaskLog taskLog);
 
+	List<TaskLog> getLogsByTaskId(Long taskId);
+
 }

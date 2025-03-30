@@ -43,16 +43,38 @@ public class TaskService implements ITaskService {
 	}
 
 	@Override
-	public void delete(Long id) {
-		Task task = taskDAO.findById(id);
+	public void delete(Long taskId) {
+
+		Task task = taskDAO.findById(taskId);
+
 		if (task != null) {
+
+//			List<TaskLog> logs = taskLogDAO.getAllLogs(taskId);
+//
+//			try {
+//				String logsJson = new ObjectMapper().writeValueAsString(logs);
+//
+//				TaskBoardLog logEntry = new TaskBoardLog();
+//				logEntry.setAction("TASK_DELETED");
+//				logEntry.setId(taskId);
+//				// TODO
+//				logEntry.setChangedBy("Unknown");
+//				logEntry.setDetails(logsJson);
+//
+//				taskBoardLogDAO.save(logEntry);
+//
+//			} catch (JsonProcessingException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+
 			try {
-				taskDAO.deleteById(id);
+				taskDAO.deleteById(taskId);
 			} catch (OptimisticLockingFailureException ex) {
 				throw new RuntimeException("Failed to delete task  due to optimistic locking conflict");
 			}
 		} else {
-			throw new EntityNotFoundException("Task not found with ID: " + id);
+			throw new EntityNotFoundException("Task not found with ID: " + taskId);
 		}
 	}
 

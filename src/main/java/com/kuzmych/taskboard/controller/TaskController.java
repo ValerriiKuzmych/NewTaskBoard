@@ -25,6 +25,7 @@ import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
 import com.kuzmych.taskboard.entity.TaskLog;
 import com.kuzmych.taskboard.entity.User;
+import com.kuzmych.taskboard.service.ITaskBoardLogService;
 import com.kuzmych.taskboard.service.ITaskLogService;
 import com.kuzmych.taskboard.service.ITaskService;
 import com.kuzmych.taskboard.service.IUserTaskBoardAccessService;
@@ -42,6 +43,9 @@ public class TaskController {
 
 	@Autowired
 	private ITaskLogService taskLogService;
+
+	@Autowired
+	private ITaskBoardLogService taskBoardLogService;
 
 	@Autowired
 	IUserTaskBoardAccessService userTaskBoardAccessService;
@@ -100,6 +104,9 @@ public class TaskController {
 				|| !task.getTaskBoard().getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
 			return "error/403";
 		}
+
+		taskBoardLogService.saveTaskLogInTaskBoard(id);
+		
 		taskService.delete(id);
 
 		return "redirect:/taskboards/show/" + task.getTaskBoard().getId();

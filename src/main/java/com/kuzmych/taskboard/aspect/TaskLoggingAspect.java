@@ -63,16 +63,15 @@ public class TaskLoggingAspect {
 	}
 
 	private void logFieldChange(Task task, String username, String field, String oldValue, String newValue) {
-		System.out.println(
-				"oldValue: " + oldValue + ", newValue: " + newValue + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 		if (!Objects.equals(oldValue, newValue)) {
-			System.out.println("Objects.equals(oldValue, newValue) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 			saveLog(task, username, field, oldValue, newValue);
 		}
 	}
 
 	private void saveLog(Task task, String username, String field, String oldValue, String newValue) {
-		System.out.println("saveLog !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 		TaskLog log = new TaskLog();
 
 		log.setTask(task);
@@ -82,7 +81,7 @@ public class TaskLoggingAspect {
 		log.setNewValue(newValue);
 		log.setChangedAt(LocalDateTime.now());
 
-		taskLogService.saveLog(log);
+		taskLogService.save(log);
 
 	}
 
