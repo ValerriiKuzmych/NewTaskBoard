@@ -3,6 +3,10 @@ package com.kuzmych.taskboard.service;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -198,4 +202,13 @@ public class UserService implements IUserService {
 		return user;
 	};
 
+	@Override
+	public String getCurrentUserLogin() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.isAuthenticated()
+				&& authentication.getPrincipal() instanceof UserDetails) {
+			return ((UserDetails) authentication.getPrincipal()).getUsername();
+		}
+		return "unknown";
+	}
 }

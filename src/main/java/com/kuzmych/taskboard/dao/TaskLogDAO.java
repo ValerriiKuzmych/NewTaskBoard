@@ -28,7 +28,7 @@ public class TaskLogDAO implements ITaskLogDAO {
 
 	@Override
 	public List<TaskLog> getLogsByTaskId(Long taskId) {
-
+		
 		return sessionFactory.getCurrentSession().createQuery("FROM TaskLog WHERE task.id = :taskId", TaskLog.class)
 				.setParameter("taskId", taskId).list();
 	}

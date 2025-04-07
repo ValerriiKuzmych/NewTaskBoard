@@ -9,6 +9,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.kuzmych.taskboard.entity.Task;
@@ -54,7 +57,11 @@ public class TaskLoggingAspect {
 		}
 		oldTaskThreadLocal.remove();
 
-		String username = "unknown";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = (authentication != null && authentication.isAuthenticated()
+				&& authentication.getPrincipal() instanceof UserDetails)
+						? ((UserDetails) authentication.getPrincipal()).getUsername()
+						: "unknown";
 
 		logFieldChange(updatedTask, username, "title", oldTask.getName(), updatedTask.getName());
 		logFieldChange(updatedTask, username, "description", oldTask.getDescription(), updatedTask.getDescription());

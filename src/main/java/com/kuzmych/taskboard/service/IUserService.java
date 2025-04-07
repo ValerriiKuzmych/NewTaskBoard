@@ -26,4 +26,6 @@ public interface IUserService {
 	User findByUserEmail(String userEmail);
 
 	User findByUserResetToken(String token);
+
+	String getCurrentUserLogin();
 }

@@ -12,6 +12,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "task_board")
 public class TaskBoard {
@@ -24,13 +27,16 @@ public class TaskBoard {
 	private String description;
 
 	@OneToMany(mappedBy = "taskBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<Task> tasks;
 
 	@OneToMany(mappedBy = "taskBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<UserTaskBoardAccess> usersWithAccess;
 
 	@ManyToOne
 	@JoinColumn(name = "general_page_id")
+	@JsonBackReference
 	private GeneralPage generalPage;
 
 	@Version

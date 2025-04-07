@@ -49,24 +49,6 @@ public class TaskService implements ITaskService {
 
 		if (task != null) {
 
-//			List<TaskLog> logs = taskLogDAO.getAllLogs(taskId);
-//
-//			try {
-//				String logsJson = new ObjectMapper().writeValueAsString(logs);
-//
-//				TaskBoardLog logEntry = new TaskBoardLog();
-//				logEntry.setAction("TASK_DELETED");
-//				logEntry.setId(taskId);
-//				// TODO
-//				logEntry.setChangedBy("Unknown");
-//				logEntry.setDetails(logsJson);
-//
-//				taskBoardLogDAO.save(logEntry);
-//
-//			} catch (JsonProcessingException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 
 			try {
 				taskDAO.deleteById(taskId);

@@ -8,6 +8,6 @@ public interface ITaskBoardLogService {
 
 	List<TaskBoardLog> getAllLogs(Long id);
 
-	void saveTaskLogInTaskBoard(Long taskId);
+	void saveTaskLogInTaskBoard(Long taskId, String username);
 
 }

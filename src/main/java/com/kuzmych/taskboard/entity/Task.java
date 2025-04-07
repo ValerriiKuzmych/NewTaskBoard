@@ -16,6 +16,8 @@ import javax.persistence.Version;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "task")
 public class Task {
@@ -47,6 +49,7 @@ public class Task {
 
 	@ManyToOne
 	@JoinColumn(name = "task_board_id")
+	@JsonBackReference
 	private TaskBoard taskBoard;
 
 	@Version

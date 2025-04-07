@@ -13,6 +13,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -31,9 +34,11 @@ public class User {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "general_page_id")
+	@JsonManagedReference
 	private GeneralPage generalPage;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<UserTaskBoardAccess> taskBoardAccesses;
 
 	@Version

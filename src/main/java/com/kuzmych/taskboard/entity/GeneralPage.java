@@ -13,6 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "general_page")
 public class GeneralPage {
@@ -22,10 +25,12 @@ public class GeneralPage {
 	private long id;
 
 	@OneToMany(mappedBy = "generalPage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<TaskBoard> taskBoards;
 
 	@OneToOne
-	@JoinColumn(name = "user_id") // This creates a foreign key column in the 'general_page' table.
+	@JoinColumn(name = "user_id")
+	@JsonBackReference
 	private User user;
 
 	public GeneralPage() {

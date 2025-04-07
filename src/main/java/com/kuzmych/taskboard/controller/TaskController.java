@@ -105,8 +105,8 @@ public class TaskController {
 			return "error/403";
 		}
 
-		taskBoardLogService.saveTaskLogInTaskBoard(id);
-		
+		taskBoardLogService.saveTaskLogInTaskBoard(id, loggedInUser.getName());
+
 		taskService.delete(id);
 
 		return "redirect:/taskboards/show/" + task.getTaskBoard().getId();

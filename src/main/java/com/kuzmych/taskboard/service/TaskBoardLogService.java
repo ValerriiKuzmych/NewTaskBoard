@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kuzmych.taskboard.dao.ITaskBoardLogDAO;
+import com.kuzmych.taskboard.dao.ITaskDAO;
 import com.kuzmych.taskboard.dao.ITaskLogDAO;
 import com.kuzmych.taskboard.entity.TaskBoardLog;
 import com.kuzmych.taskboard.entity.TaskLog;
@@ -23,6 +24,9 @@ public class TaskBoardLogService implements ITaskBoardLogService {
 	@Autowired
 	private ITaskLogDAO taskLogDAO;
 
+	@Autowired
+	private ITaskDAO taskDAO;
+
 	@Transactional(readOnly = true)
 	@Override
 	public List<TaskBoardLog> getAllLogs(Long id) {
@@ -32,7 +36,7 @@ public class TaskBoardLogService implements ITaskBoardLogService {
 
 	@Transactional
 	@Override
-	public void saveTaskLogInTaskBoard(Long taskId) {
+	public void saveTaskLogInTaskBoard(Long taskId, String username) {
 
 		TaskBoardLog logEntry = new TaskBoardLog();
 
@@ -47,8 +51,8 @@ public class TaskBoardLogService implements ITaskBoardLogService {
 
 				logEntry.setAction("TASK_DELETED");
 				logEntry.setId(taskId);
-				// TODO
-				logEntry.setChangedBy("Unknown");
+				logEntry.setTaskBoard(taskDAO.findById(taskId).getTaskBoard());
+				logEntry.setChangedBy(username);
 				logEntry.setDetails(logsJson);
 
 				taskBoardLogDAO.save(logEntry);
