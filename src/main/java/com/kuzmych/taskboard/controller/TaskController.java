@@ -187,9 +187,13 @@ public class TaskController {
 
 	@PostMapping("/update")
 	public String updateTask(@RequestParam("id") Long id, @ModelAttribute Task task,
-			@RequestParam(value = "file", required = false) MultipartFile file, Model model) {
+			@RequestParam(value = "file", required = false) MultipartFile file, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
 
 		task.setId(id);
+		task.setExecutorName(loggedInUser.getName());
+
 		Task existingTask = taskService.findById(id);
 		if (file != null && !file.isEmpty()) {
 			try {

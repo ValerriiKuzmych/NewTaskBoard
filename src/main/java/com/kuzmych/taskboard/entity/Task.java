@@ -67,7 +67,7 @@ public class Task {
 		this.taskStatus = taskStatus;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
