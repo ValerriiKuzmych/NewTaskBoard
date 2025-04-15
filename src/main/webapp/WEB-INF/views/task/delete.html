@@ -26,8 +26,7 @@
     <div class="container">
         <h2>Delete Task</h2>
         <p>Are you sure you want to delete this task?</p>
-        <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="get">
-            <input type="hidden" name="_method" value="delete" />
+        <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post">
             <button type="submit">Delete</button>
         </form>
     </div>

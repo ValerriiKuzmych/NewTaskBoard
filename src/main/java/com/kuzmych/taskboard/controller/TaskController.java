@@ -90,7 +90,7 @@ public class TaskController {
 		return "task/show_for_users_with_access";
 	}
 
-	@GetMapping("/{id}/delete")
+	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable Long id, HttpSession session) {
 
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
@@ -112,7 +112,7 @@ public class TaskController {
 		return "redirect:/taskboards/show/" + task.getTaskBoard().getId();
 	}
 
-	@GetMapping("/{id}/delete-access")
+	@PostMapping("/{id}/delete-access")
 	public String deleteForUsersWithAccess(@PathVariable Long id, HttpSession session) {
 
 		User loggedInUser = (User) session.getAttribute("loggedInUser");
@@ -339,7 +339,7 @@ public class TaskController {
 			return "error/403";
 		}
 
-		List<TaskLog> logs = taskLogService.getAllLogs(id);
+		List<TaskLog> logs = taskLogService.getLogsByTaskId(id);
 
 		model.addAttribute("task", task);
 		model.addAttribute("logs", logs);

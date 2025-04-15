@@ -21,6 +21,14 @@ public class TaskLogService implements ITaskLogService {
 		return taskLogDAO.getAllLogs(id);
 	}
 
+	@Transactional(readOnly = true)
+	@Override
+	public List<TaskLog> getLogsByTaskId(Long taskId) {
+
+		return taskLogDAO.getLogsByTaskId(taskId);
+
+	}
+
 	@Transactional
 	@Override
 	public void save(TaskLog taskLog) {

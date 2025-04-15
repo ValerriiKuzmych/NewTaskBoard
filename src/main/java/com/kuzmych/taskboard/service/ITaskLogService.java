@@ -8,6 +8,8 @@ public interface ITaskLogService {
 
 	List<TaskLog> getAllLogs(Long id);
 
+	List<TaskLog> getLogsByTaskId(Long taskId);
+
 	void save(TaskLog taskLog);
 
 }

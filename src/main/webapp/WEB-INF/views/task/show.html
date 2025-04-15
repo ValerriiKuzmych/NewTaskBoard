@@ -182,10 +182,12 @@ p {
 
 			<div class="actions">
 				<a th:href="@{/tasks/edit/{id}(id=${task.id})}"
-					class="btn btn-secondary">Edit</a> <a
-					th:href="@{/tasks/{id}/delete(id=${task.id})}"
-					class="btn btn-secondary">Delete</a> <a
-					th:href="@{/tasks/{id}/logs(id=${task.id})}"
+					class="btn btn-secondary">Edit</a>
+				<form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post"
+					style="display: inline;">
+					<button type="submit" class="btn btn-secondary">Delete</button>
+				</form>
+				<a th:href="@{/tasks/{id}/logs(id=${task.id})}"
 					class="btn btn-secondary">Logs</a>
 
 			</div>
