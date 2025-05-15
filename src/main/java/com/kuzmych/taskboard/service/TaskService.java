@@ -49,7 +49,6 @@ public class TaskService implements ITaskService {
 
 		if (task != null) {
 
-
 			try {
 				taskDAO.deleteById(taskId);
 			} catch (OptimisticLockingFailureException ex) {

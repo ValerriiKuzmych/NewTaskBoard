@@ -57,16 +57,16 @@ public class TaskBoardService implements ITaskBoardService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		TaskBoard taskBoard = taskBoardDAO.findById(id);
 		if (taskBoard != null) {
 			try {
 
 				taskBoardDAO.deleteById(id);
-				System.out.println("Deleted TaskBoard with ID: " + id + " and Version: " + taskBoard.getVersion());
+
 			} catch (OptimisticLockingFailureException ex) {
-				System.err.println("Failed to delete task board due to optimistic locking conflict. ID: " + id
-						+ " Version: " + taskBoard.getVersion());
+
 				throw new RuntimeException("Failed to delete task board due to optimistic locking conflict");
 			}
 		} else {
