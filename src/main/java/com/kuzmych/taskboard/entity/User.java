@@ -1,6 +1,7 @@
 package com.kuzmych.taskboard.entity;
 
 import java.time.LocalDateTime;
+
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,9 +16,11 @@ import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = "email"),
+		@UniqueConstraint(columnNames = "login") })
 public class User {
 
 	@Id

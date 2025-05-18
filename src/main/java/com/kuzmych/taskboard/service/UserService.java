@@ -81,6 +81,11 @@ public class UserService implements IUserService {
 		return user;
 
 	}
+	
+	@Transactional(readOnly = true)
+	public boolean isLoginOrEmailTaken(String login, String email) {
+	    return userDAO.existsByLogin(login) || userDAO.existsByEmail(email);
+	}
 
 	@Transactional
 	@Override

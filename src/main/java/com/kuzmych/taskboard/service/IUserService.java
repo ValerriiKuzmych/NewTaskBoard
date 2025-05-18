@@ -16,6 +16,8 @@ public interface IUserService {
 	void updatePassword(User user);
 
 	boolean authenticateUser(String username, String plainPassword);
+	
+	boolean isLoginOrEmailTaken(String login, String email);
 
 	User convertingToUser(UserRegistrationDTO userDTO);
 

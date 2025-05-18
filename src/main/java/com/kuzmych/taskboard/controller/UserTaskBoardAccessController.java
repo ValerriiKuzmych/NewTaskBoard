@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.entity.User;
 import com.kuzmych.taskboard.entity.UserTaskBoardAccess;
 import com.kuzmych.taskboard.service.ITaskBoardService;
 import com.kuzmych.taskboard.service.IUserService;
@@ -32,30 +33,30 @@ public class UserTaskBoardAccessController {
 	IUserTaskBoardAccessService userTaskBoardAccessService;
 
 	@GetMapping("/{id}/access-option")
-	public String showUsersAccessForm(@PathVariable Long id, Model model, HttpSession session) {
+	public String showUsersAccessForm(@PathVariable Long id, @RequestParam(required = false) String userIdentifier,
+			Model model, HttpSession session) {
 
-//		User currentUser = (User) session.getAttribute("currentUser");
-//
-//		if (currentUser == null) {
-//
-//			return "redirect:/users/login";
-//		}
-//
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+		if (loggedInUser == null) {
+
+			return "redirect:/users/login";
+		}
+
 		TaskBoard taskBoard = taskBoardService.findById(id);
-//
-//		if (!taskBoard.getGeneralPage().getUser().equals(currentUser)) {
-//
-//			return "error-unauthorized";
-//		}
 
-//		User targetUser = null;
-//
-//		if (userIdentifier != null && !userIdentifier.trim().isEmpty()) {
-//			targetUser = userService.findByNameOrId(userIdentifier);
-//
-//		}
+		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
+
+		User targetUser = null;
+
+		if (userIdentifier != null && !userIdentifier.trim().isEmpty()) {
+			targetUser = userService.findByNameOrId(userIdentifier);
+
+		}
 		model.addAttribute("taskBoard", taskBoard);
-//		model.addAttribute("targetUser", targetUser);
+		model.addAttribute("targetUser", targetUser);
 		model.addAttribute("taskBoardAccess", new UserTaskBoardAccess());
 
 		return "users-access/access-form";
@@ -66,17 +67,19 @@ public class UserTaskBoardAccessController {
 	public String giveUsersAccess(@PathVariable Long id, @RequestParam String userIdentifier,
 			@ModelAttribute UserTaskBoardAccess taskBoardacces, HttpSession session) {
 
-//		User currentUser = (User) session.getAttribute("currentUser");
-//
-//		if (currentUser == null) {
-//
-//			return "redirect:/users/login";
-//		}
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
 
-//		if (!taskBoard.getGeneralPage().getUser().equals(currentUser)) {
-//
-//			return "error-unauthorized";
-//		}
+		if (loggedInUser == null) {
+
+			return "redirect:/users/login";
+		}
+
+		TaskBoard taskBoard = taskBoardService.findById(id);
+
+		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+
+		}
 
 		userTaskBoardAccessService.giveAccessToTaskBoard(id, userIdentifier, taskBoardacces);
 
@@ -88,17 +91,17 @@ public class UserTaskBoardAccessController {
 	public String deleteUsersAccess(@PathVariable Long id, @RequestParam String userIdentifier,
 			@ModelAttribute UserTaskBoardAccess taskBoardacces, HttpSession session) {
 
-//		User currentUser = (User) session.getAttribute("currentUser");
-//
-//		if (currentUser == null) {
-//
-//			return "redirect:/users/login";
-//		}
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
 
-//		if (!taskBoard.getGeneralPage().getUser().equals(currentUser)) {
-//
-//			return "error-unauthorized";
-//		}
+		if (loggedInUser == null) {
+
+			return "redirect:/users/login";
+		}
+		TaskBoard taskBoard = taskBoardService.findById(id);
+		if (!taskBoard.getGeneralPage().getUser().equals(loggedInUser)) {
+
+			return "error-unauthorized";
+		}
 
 		userTaskBoardAccessService.deleteAccessToTaskBoard(id, userIdentifier);
 

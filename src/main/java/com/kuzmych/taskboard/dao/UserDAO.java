@@ -56,6 +56,22 @@ public class UserDAO implements IUserDAO {
 		return sessionFactory.getCurrentSession().createQuery("FROM User WHERE email = :email", User.class)
 				.setParameter("email", userEmail).uniqueResult();
 	}
+	
+	@Override
+	public boolean existsByLogin(String login) {
+	    return sessionFactory.getCurrentSession()
+	        .createQuery("FROM User WHERE login = :login", User.class)
+	        .setParameter("login", login)
+	        .uniqueResult() != null;
+	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+	    return sessionFactory.getCurrentSession()
+	        .createQuery("FROM User WHERE email = :email", User.class)
+	        .setParameter("email", email)
+	        .uniqueResult() != null;
+	}
 
 	@Override
 	public User findByUserResetToken(String token) {

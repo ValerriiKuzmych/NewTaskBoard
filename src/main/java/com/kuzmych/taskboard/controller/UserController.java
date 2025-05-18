@@ -51,7 +51,13 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@ModelAttribute("userDTO") UserRegistrationDTO userDTO, BindingResult result) {
+	public String registerUser(@ModelAttribute("userDTO") UserRegistrationDTO userDTO, BindingResult result,
+			Model model) {
+
+		if (userService.isLoginOrEmailTaken(userDTO.getLogin(), userDTO.getEmail())) {
+			model.addAttribute("error", "A user with this login or email already exists.");
+			return "user/user-registration";
+		}
 
 		if (result.hasErrors()) {
 

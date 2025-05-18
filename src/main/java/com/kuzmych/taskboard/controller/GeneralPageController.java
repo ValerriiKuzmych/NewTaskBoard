@@ -37,6 +37,7 @@ public class GeneralPageController {
 		if (loggedInUser == null) {
 			return "redirect:/users/login";
 		}
+		
 		GeneralPage generalPage = generalPageService.findById(id);
 
 		if (generalPage == null || !generalPage.getUser().getLogin().equals(loggedInUser.getLogin())) {

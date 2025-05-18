@@ -11,8 +11,12 @@ public interface IUserDAO {
 	User findByUserName(String userName);
 
 	User findByUserEmail(String userEmail);
-	
+
 	User findByUserResetToken(String token);
+
+	boolean existsByLogin(String login);
+
+	boolean existsByEmail(String email);
 
 	List<User> findAll();
 
