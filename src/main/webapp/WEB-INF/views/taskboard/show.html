@@ -169,6 +169,8 @@ body {
 				<a th:if="${taskBoard.generalPage != null}"
 					th:href="@{|/generalpage/show/${taskBoard.generalPage.id}|}"
 					class="btn btn-secondary">Go to General Page</a> <a
+					th:href="@{|/taskboards/${taskBoard.id}/logs|}"
+					class="btn btn-secondary">Logs</a> <a
 					th:href="@{/users-access/{id}/access-option(id=${taskBoard.id})}"
 					class="btn btn-secondary">Delegation Settings</a>
 			</div>

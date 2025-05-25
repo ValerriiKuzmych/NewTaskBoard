@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Task Board Change History</title>
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+	<h1>Task Board Change History</h1>
+
+	<h2 th:text="${taskBoard.name}">Task Board Name</h2>
+
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Action</th>
+				<th>Details</th>
+				<th>Changed By</th>
+				<th>Change Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="log : ${logs}">
+				<td th:text="${log.action}">Action Type</td>
+				<td th:text="${log.changedBy}">User</td>
+				<td
+					th:text="${log.changedAt != null ? log.changedAt.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss')) : 'N/A'}">Date</td>
+				<td><pre th:text="${log.details}">Details</pre></td>
+
+			</tr>
+		</tbody>
+	</table>
+
+	<a th:href="@{/taskboards/show/{id}(id=${taskBoard.id})}">Back to
+		Task Board</a>
+</body>
+</html>

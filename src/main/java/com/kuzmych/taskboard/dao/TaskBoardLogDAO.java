@@ -16,8 +16,10 @@ public class TaskBoardLogDAO implements ITaskBoardLogDAO {
 
 	@Override
 	public List<TaskBoardLog> getAllLogs(Long id) {
-
-		return sessionFactory.getCurrentSession().createQuery("FROM TaskBoardLog", TaskBoardLog.class).list();
+		
+		return sessionFactory.getCurrentSession()
+				.createQuery("FROM TaskBoardLog l WHERE l.taskBoard.id = :id", TaskBoardLog.class)
+				.setParameter("id", id).getResultList();
 	}
 
 	@Override

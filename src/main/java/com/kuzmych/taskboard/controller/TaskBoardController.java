@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kuzmych.taskboard.entity.GeneralPage;
 import com.kuzmych.taskboard.entity.Task;
 import com.kuzmych.taskboard.entity.TaskBoard;
+import com.kuzmych.taskboard.entity.TaskBoardLog;
 import com.kuzmych.taskboard.entity.TaskPriority;
 import com.kuzmych.taskboard.entity.TaskStatus;
 import com.kuzmych.taskboard.entity.User;
+import com.kuzmych.taskboard.service.IJsonService;
+import com.kuzmych.taskboard.service.ITaskBoardLogService;
 import com.kuzmych.taskboard.service.ITaskBoardService;
 import com.kuzmych.taskboard.service.IUserTaskBoardAccessService;
 
@@ -35,6 +38,11 @@ public class TaskBoardController {
 	private ITaskBoardService taskBoardService;
 	@Autowired
 	private IUserTaskBoardAccessService userTaskBoardAccessService;
+
+	@Autowired
+	private ITaskBoardLogService taskBoardLogService;
+	@Autowired
+	private IJsonService jsonService;
 
 	@GetMapping("/show/{id}")
 	public String showTaskBoard(@PathVariable Long id, Model model, HttpSession session) {
@@ -240,4 +248,27 @@ public class TaskBoardController {
 		return "redirect:/taskboards/show-access/" + id;
 	}
 
+	@GetMapping("/{id}/logs")
+	public String getTaskBoardLogs(@PathVariable Long id, Model model, HttpSession session) {
+
+		User loggedInUser = (User) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/users/login";
+		}
+
+		TaskBoard taskBoard = taskBoardService.findById(id);
+
+		if (taskBoard == null || !taskBoard.getGeneralPage().getUser().getLogin().equals(loggedInUser.getLogin())) {
+			return "error/403";
+		}
+
+		List<TaskBoardLog> logs = taskBoardLogService.getAllLogs(id);
+		logs.forEach(log -> log.setDetails(jsonService.formatJson(log.getDetails())));
+
+		model.addAttribute("taskBoard", taskBoard);
+		model.addAttribute("logs", logs);
+
+		return "taskboard/logs";
+
+	}
 }
